@@ -5,27 +5,27 @@ from datetime import datetime
 # ログイン用
 class User(Base):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)  # id
     user_name = Column(String(128), unique=True)  # ユーザー名項目
     hashed_password = Column(String(128))  # セキュリティ化したパスワード
 
     def __init__(self, user_name=None, hashed_password=None):
-        self.user_name = user_name
-        self.hashed_password = hashed_password
+        self.user_name = user_name  # 初期化
+        self.hashed_password = hashed_password  # 初期化
 
     def __repr__(self):
-        return '<Name %r>' % (self.user_name)
+        return '<Name %r>' % (self.user_name)  # ???
 
 
 #コラム用
 class column(Base):
     __tablename__ = 'column'
-    column_id = Column(Integer, primary_key=True)
-    column_username = Column(String(128), unique=True)  # ユーザー名項目
-    column_tag = Column(Text)
-    column_image = Column(Text)
-    colum_date = Column(DateTime, default=datetime.now())
-
+    column_id = Column(Integer, primary_key=True)   # id
+    column_username = Column(String(128), unique=True)  # 投稿ユーザー名
+    column_tag = Column(Text)  # ジャンル識別タグ
+    column_image = Column(Text) # 画像（パスで入力）
+    colum_date = Column(DateTime, default=datetime.now())  # 投稿日時
+ #初期化
     def __init__(self, column_id=None, column_username=None, column_tag=None, column_image=None, colum_date=None):
         self.column_id = column_id
         self.column_username = column_username
