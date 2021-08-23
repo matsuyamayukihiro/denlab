@@ -23,9 +23,11 @@ class column(Base):
     column_id = Column(Integer, primary_key=True)   # id
     column_username = Column(String(128), unique=True)  # 投稿ユーザー名
     column_tag = Column(Text)  # ジャンル識別タグ
+    column_title = Column(Text(30))  # コラムタイトル
     column_image = Column(Text) # 画像（パスで入力）
     colum_date = Column(DateTime, default=datetime.now())  # 投稿日時
- #初期化
+
+#初期化
     def __init__(self, column_id=None, column_username=None, column_tag=None, column_image=None, colum_date=None):
         self.column_id = column_id
         self.column_username = column_username
@@ -34,8 +36,8 @@ class column(Base):
         self.colum_date = colum_date
 
 
-# アイデア管理用
-class idea(Base):
+# アイデア用
+class idea(Base):  # アイデア管理用
     __tablename__ = 'idea'
     idea_id = Column(Integer, primary_key=True)
     idea_username = Column(String(128), unique=True)  # ユーザー名項目
@@ -54,16 +56,11 @@ class idea(Base):
         self.idea_image = idea_image  # 画像データ
         self.idea_date = idea_date  # 投稿日時
 
-#class post_liked(Base):#いいねチェック用
-    #__tablename__ = 'post_liked'
-    #liked_id = Column(Integer, primary_key=True)
-    #good_person = Column(String(128), unique=True) #ユーザー名項目
-    #
-
-#class liked_user(Base):#いいねした人管理用
-    #__tablename__ = 'post_liked'
-    #liked_id = Column(Integer, primary_key=True)
-    #good_person = Column(String(128), unique=True) #ユーザー名項目
+class good_idea(Base):#いいねチェック用
+    __tablename__ = 'good_idea'
+    good_idea_id = Column(Integer, primary_key=True)  # いいね！した対象投稿のID
+    good_idea_userid = Column(Integer, unique=True)  # いいね！した人自身のID
+    good_idea_date = Column(DateTime, default=datetime.now())  # いいねした日時
 
 
 # 後々消すやつ
