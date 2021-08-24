@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, session, redirect,url_for
+from flask import Flask, render_template, request, session, redirect, url_for
 from models.models import OnegaiContent, User
 from models.database import db_session
 from datetime import datetime
 from app import key
 from hashlib import sha256
 import json
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = key.SECRET_KEY
@@ -28,7 +29,7 @@ def login():
 @app.route("/newcomer")  # 新規登録機能
 def newcomer():
     status = request.args.get("status")
-    return render_template("newcomer.html",status=status)
+    return render_template("newcomer.html", status=status)
 
 @app.route("/registar", methods=["post"])  # 新規登録機能
 def registar():
@@ -45,6 +46,19 @@ def registar():
         session["user_name"] = user_name  # セッション情報にユーザ名を追加
         return redirect(url_for("index"))  # メインページへ遷移
 
+profile = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # dbは絶対参照
+cur = profile.cursor()
+profile_user_name = cur.execute("SELECT users.user_name FROM users")
+profile_hashed_password = cur.execute("SELECT users.user_name FROM users")
+
+profile = {
+    "profile1":
+        [{"name": "name", "pass": "password"}]
+    }
+with open("profile.json", "w") as f:
+    json.dump(profile, f)  # jsonファイル書き込み
+
+# python -m json.tool profile.json →コマンドプロンプトでデータ表示するコマンド
 @app.route("/logout")
 def logout():
     session.pop("user_name", None)
@@ -64,32 +78,67 @@ def index():  # トップページ開く
 # コラム系
 @app.route("/column")   # コラム表示機能
 def column():
-    column = db_session.query(column).all  # コラム情報全件取得
+    column = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
+    cur = column.cursor()  # データオープン
+    column_id = cur.execute("SELECT column.column_id FROM column")  # 抽出
+    column_username = cur.execute("SELECT column.column_username FROM column")
+    column_tag = cur.execute("SELECT column.column_tag FROM column")
+    column_title = cur.execute("SELECT column.column_title FROM column")
+    column_image = cur.execute("SELECT column.column_image FROM column")
+    column_date = cur.execute("SELECT column.column_date FROM column")
     for row in column:  # 1カードずつjsonでデータ渡す
         column = {
-            "column"+row: {
-                "column_id": column.column_id,
-                "column_username": column.column_username,
-                "column_tag": column.column_tag,
-                "column_image": column.column_image,
-                "column_date": column.colum_date,
+            "column": {
+                "column_id": "column_id",
+                "column_username": "column_username",
+                "column_tag": "column_tag",
+                "column_image": "column_image",
+                "column_date": "column_date"
             }
          }
+with open('column.json', 'w') as d:
+    json.dump(column, d)  # jsonファイル書き込み
 
-#@app.route("/good", methods = ['post'])    #いいねボタン処理
+  # アイデア出し系
+def idea():  # 投稿アイデア表示機能
+    idea = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
+    cur = idea.cursor()  # データオープン
+    for row in idea:  # 1カードずつjsonでデータ渡す
+        idea = {
+            "idea": {
+                "idea_id": "idea_id",
+                "idea_username": "idea_username",
+                "idea_tag": "idea_tag",
+                "idea_discription": "idea_discription",
+                "idea_image": "idea_image",
+                "idea_date": "idea_date"
+            }
+         }
+with open('column.json', 'w') as b:
+    json.dump(column, b)  # jsonファイル書き込み
+
+@app.route("/good", methods = ['post'])  #いいね機能
 #def good_check():
-    #post_person = post_liked.query.filter_by(id=request.form["update"]).first()#いいねされた投稿データに対して既にいいねした人呼び出し&変数(good_person)に代入
-    #liked_person = liked_user.query.filter_by(id=request.form["update"]).first()#その投稿にいいねした人のデータの呼び出し&変数に代入(引数にはgoodを使用する)
-    #liked_personといいねリクエスト者を照合
-    #if post_person == liked_person:#既にいいねしている場合
-        # #リストに名前があったら（既にいいねしてる）場合、ノーカウント
+ #   post_person = post_liked.query.filter_by(id=request.form["update"]).first()#いいねされた投稿データに対して既にいいねした人呼び出し&変数(good_person)に代入
+  #  liked_person = liked_user.query.filter_by(id=request.form["update"]).first()#その投稿にいいねした人のデータの呼び出し&変数に代入(引数にはgoodを使用する)
+   # liked_personといいねリクエスト者を照合
+    #SELECT [idea].idea_id, [idea].idea_title, [idea].idea_discription, [idea].idea_image,(SELECT count((*) FROM [投稿ーいいね] WHERE [投稿ーいいね].投稿ID ＝[投稿].投稿ID) as いいね数idea
+   # LEFT
+   # OUTER
+  #  JOIN[投稿ーいいね]
+   # ON[投稿].投稿ID = [投稿ーいいね].投稿ID
+   # WHERE
+   # 投稿ID ＝ １
 
-    #else:#リストに名前が無かったら、
-        #liked_person = post(liked_person) #OnegaiContent=データ追加（引数は追加したいデータ）
-        #db_session.add(liked_person)#引数は追加したい変数
-        #db_session.commit() #追加データの反映#dbにユーザ名追加
+    #if post_person == liked_person:#既にいいねしている場合
+            # リストに名前があったら（既にいいねしてる）場合、ノーカウント
+
+  #  else:#リストに名前が無かったら、
+   #     liked_person = post(liked_person) #OnegaiContent=データ追加（引数は追加したいデータ）
+    #    db_session.add(liked_person)#引数は追加したい変数
+     #   db_session.commit() #追加データの反映#dbにユーザ名追加
     #good_person内の名前をカウント&変数(good_count)に代入
-    #good_countを表示
+   # good_countを表示
 
 
 @app.route("/add", methods=["post"])
@@ -123,12 +172,6 @@ def delete():
 def top():
     status = request.args.get("status")
     return render_template("top.html", status=status)
-
-#@app.route('/json')   #jsonファイル処理
-#def json():
- #   a = open('sample.json')#jsonファイルオープン
-  #  b = json.load(a)#データ代入
-   # print(b)
 
 
 if __name__ == "__main__":
