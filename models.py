@@ -25,7 +25,7 @@ class column(Base):
     column_tag = Column(Text)  # ジャンル識別タグ
     column_title = Column(Text(30))  # コラムタイトル
     column_image = Column(Text) # 画像（パスで入力）
-    colum_date = Column(DateTime, default=datetime.now())  # 投稿日時
+    column_date = Column(DateTime, default=datetime.now())  # 投稿日時
 
 #初期化
     def __init__(self, column_id=None, column_username=None, column_tag=None, column_image=None, colum_date=None):
@@ -62,7 +62,10 @@ class good_idea(Base):#いいねチェック用
     good_idea_userid = Column(Integer, unique=True)  # いいね！した人自身のID
     good_idea_date = Column(DateTime, default=datetime.now())  # いいねした日時
 
-
+#SELECT  ＊ FROM [投稿]
+#LEFT OUTER JOIN [投稿ーいいね]
+#ON [投稿].投稿ID = [投稿ーいいね].投稿ID
+#WHERE 投稿ID ＝ １
 # 後々消すやつ
 class OnegaiContent(Base):
     __tablename__ = 'onegaicontents'
