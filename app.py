@@ -103,6 +103,15 @@ with open('column.json', 'w') as d:
 def idea():  # 投稿アイデア表示機能
     idea = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
     cur = idea.cursor()  # データオープン
+    idea_id = cur.execute("SELECT idea.idea_id FROM idea")  # 抽出
+    idea_username = cur.execute("SELECT idea.idea_username FROM idea")
+    idea_tag = cur.execute("SELECT idea.idea_tag FROM idea")
+    idea_title = cur.execute("SELECT idea.column_image FROM idea")
+    idea_discription = cur.execute("SELECT idea.idea_discription FROM idea")
+    idea_title = cur.execute("SELECT idea.idea_title FROM idea")
+    idea_image = cur.execute("SELECT idea.column_image FROM idea")
+    idea_good = cur.execute("SELCT idea.idea_good FROM idea")  # 貰ったいいね数
+    idea_date = cur.execute("SELECT idea.idea_date FROM idea")
     for row in idea:  # 1カードずつjsonでデータ渡す
         idea = {
             "idea": {
@@ -117,29 +126,25 @@ def idea():  # 投稿アイデア表示機能
 with open('column.json', 'w') as b:
     json.dump(column, b)  # jsonファイル書き込み
 
-@app.route("/good", methods = ['post'])  #いいね機能
-#def good_check():
- #   post_person = post_liked.query.filter_by(id=request.form["update"]).first()#いいねされた投稿データに対して既にいいねした人呼び出し&変数(good_person)に代入
-  #  liked_person = liked_user.query.filter_by(id=request.form["update"]).first()#その投稿にいいねした人のデータの呼び出し&変数に代入(引数にはgoodを使用する)
-   # liked_personといいねリクエスト者を照合
-    #SELECT [idea].idea_id, [idea].idea_title, [idea].idea_discription, [idea].idea_image,(SELECT count((*) FROM [投稿ーいいね] WHERE [投稿ーいいね].投稿ID ＝[投稿].投稿ID) as いいね数idea
-   # LEFT
-   # OUTER
-  #  JOIN[投稿ーいいね]
-   # ON[投稿].投稿ID = [投稿ーいいね].投稿ID
-   # WHERE
-   # 投稿ID ＝ １
+@app.route("/good_check", methods = ['post'])  #いいね機能
+def good_check():
+    good_person_id = request.form["request_id"]  # いいねリクエストしたユーザidデータ取得
+    good_check = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # dbは絶対参照
+    cur = good_check.cursor()  # dbオープン
+    good_idea_check = cur.execute("SELECT * FROM idea"
+                                    "LEFT OUTER JOIN good_idea"
+                                    "ON idea.idea_id = good_idea.good_idea_id"
+                                    "WHERE idea.idea_id = 1"
+                                    "SELECT COUNT(idea_good) FROM idea")  #いいねした人idといいねされた対象投稿のidを連結したテーブル
+    #if(good_person_id == idea.idea_id):
+    #delete = good_idea.query.filter_by(good_idea_userid=good_person_id).first()  # リクエスト者idと対になるidを持つレコードを抽出
+    #db_session.delete(delete)  # 消す
+    #db_session.commit()  # 反映
 
-    #if post_person == liked_person:#既にいいねしている場合
-            # リストに名前があったら（既にいいねしてる）場合、ノーカウント
-
-  #  else:#リストに名前が無かったら、
-   #     liked_person = post(liked_person) #OnegaiContent=データ追加（引数は追加したいデータ）
-    #    db_session.add(liked_person)#引数は追加したい変数
-     #   db_session.commit() #追加データの反映#dbにユーザ名追加
-    #good_person内の名前をカウント&変数(good_count)に代入
-   # good_countを表示
-
+#  else:　　#　リストに名前が無かったら、
+         #good_person = (good_idea_id, good_idea_userid, good_idea_date) #いいねリクエスト者データに入れる要素代入（引数は追加したいデータ）
+         #db_session.add(good_person)  # 引数は追加したい変数
+         #db_session.commit()  # 追加データの反映
 
 @app.route("/add", methods=["post"])
 def add():  # データベース内の各項目に入力値の追加
