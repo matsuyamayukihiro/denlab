@@ -79,8 +79,7 @@ def index():  # トップページ開く
 # コラム系
 @app.route("/column")   # コラム表示機能
 def column():
- #   column = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
-  #  cur = column.cursor()  # データオープン
+    column = session.query(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
  #データ取ってくる
  for row in column:  # 1カードずつjsonでデータ渡す
     column_id = session.query("SELECT column.column_id FROM column")  # 抽出
@@ -299,8 +298,6 @@ def column():
 
   # アイデア出し系
 def idea():  # 投稿アイデア表示機能
-    #idea = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
-    #cur = idea.cursor()  # データオープン
     good_idea_check = session.query("SELECT * FROM idea\
                                        LEFT OUTER JOIN good_idea\
                                        ON idea.idea_id = good_idea.good_idea_id\
@@ -319,14 +316,32 @@ def idea():  # 投稿アイデア表示機能
 
     for row in idea:  # 1カードずつjsonでデータ渡す
         idea = {
-            "idea": {
-                "idea_id": idea_id,
-                "idea_username": idea_username,
-                "idea_tag": idea_tag,
-                "idea_discription": idea_discription,
-                "idea_image": idea_image,
-                "good_idea_check": good_idea_check,
-                "idea_date": idea_date
+            "idea1": {
+                "idea_id1": idea_id,
+                "idea_username1": idea_username,
+                "idea_tag1": idea_tag,
+                "idea_discription1": idea_discription,
+                "idea_image1": idea_image,
+                "good_idea_check1": good_idea_check,
+                "idea_date1": idea_date
+            },
+            "idea2": {
+                "idea_id2": idea_id,
+                "idea_username2": idea_username,
+                "idea_tag2": idea_tag,
+                "idea_discription2": idea_discription,
+                "idea_image2": idea_image,
+                "good_idea_check2": good_idea_check,
+                "idea_date2": idea_date
+            },
+            "idea3": {
+                "idea_id3": idea_id,
+                "idea_username3": idea_username,
+                "idea_tag3": idea_tag,
+                "idea_discription3": idea_discription,
+                "idea_image3": idea_image,
+                "good_idea_check3": good_idea_check,
+                "idea_date3": idea_date
             }
          }
 
