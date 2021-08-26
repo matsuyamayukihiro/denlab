@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, session, redirect, url_for
-from models.models import OnegaiContent, User
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
+from models.models import *
 from models.database import db_session
 from datetime import datetime
 from app import key
@@ -46,19 +46,20 @@ def registar():
         session["user_name"] = user_name  # セッション情報にユーザ名を追加
         return redirect(url_for("index"))  # メインページへ遷移
 
-profile = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # dbは絶対参照
-cur = profile.cursor()
-profile_user_name = cur.execute("SELECT users.user_name FROM users")
-profile_hashed_password = cur.execute("SELECT users.user_name FROM users")
+    profile_user_name = session.query("SELECT users.user_name FROM users")  # ニックネームデータ抽出
+    profile_hashed_password = session.query("SELECT users.user_name FROM users")  # ハッシュタグデータ抽出
+# フロント受け渡し用jsonファイル作成
+    profile = {
+        {"profile1":
+            [{"name": profile_user_name, "pass": profile_hashed_password}],
+        "profile2":
+            [{"name": profile_user_name, "pass": profile_hashed_password}],
+        "profile3":
+            [{"name": profile_user_name, "pass": profile_hashed_password}]
+         }
+        }
+    return jsonify(profile, profile)  # profile.jsonにjsonデータ返す
 
-profile = {
-    "profile1":
-        [{"name": "name", "pass": "password"}]
-    }
-with open("profile.json", "w") as f:
-    json.dump(profile, f)  # jsonファイル書き込み
-
-# python -m json.tool profile.json →コマンドプロンプトでデータ表示するコマンド
 @app.route("/logout")
 def logout():
     session.pop("user_name", None)
@@ -78,73 +79,273 @@ def index():  # トップページ開く
 # コラム系
 @app.route("/column")   # コラム表示機能
 def column():
-    column = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
-    cur = column.cursor()  # データオープン
-    column_id = cur.execute("SELECT column.column_id FROM column")  # 抽出
-    column_username = cur.execute("SELECT column.column_username FROM column")
-    column_tag = cur.execute("SELECT column.column_tag FROM column")
-    column_title = cur.execute("SELECT column.column_title FROM column")
-    column_image = cur.execute("SELECT column.column_image FROM column")
-    column_date = cur.execute("SELECT column.column_date FROM column")
-    for row in column:  # 1カードずつjsonでデータ渡す
+ #   column = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
+  #  cur = column.cursor()  # データオープン
+ #データ取ってくる
+ for row in column:  # 1カードずつjsonでデータ渡す
+    column_id = session.query("SELECT column.column_id FROM column")  # 抽出
+    column_username = session.query("SELECT column.column_username FROM column")
+    column_tag = session.query("SELECT column.column_tag FROM column")
+    column_title = session.query("SELECT column.column_title FROM column")
+    column_image1 = session.query("SELECT column.column_image1 FROM column")
+    column_image2 = session.query("SELECT column.column_image2 FROM column")
+    column_image3 = session.query("SELECT column.column_image3 FROM column")
+    column_image4 = session.query("SELECT column.column_image4 FROM column")
+    column_image5 = session.query("SELECT column.column_image5 FROM column")
+    column_image6 = session.query("SELECT column.column_image6 FROM column")
+    column_image7 = session.query("SELECT column.column_image7 FROM column")
+    column_image8 = session.query("SELECT column.column_image8 FROM column")
+    column_image9 = session.query("SELECT column.column_image9 FROM column")
+    column_image10 = session.query("SELECT column.column_image10 FROM column")
+    column_date = session.query("SELECT column.column_date FROM column")
+
         column = {
-            "column": {
-                "column_id": "column_id",
-                "column_username": "column_username",
-                "column_tag": "column_tag",
-                "column_image": "column_image",
-                "column_date": "column_date"
+            {"column1": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column2": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column3": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column4": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column5": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column6": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column7": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column8": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column9": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column10": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column11": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            },
+            "column12": {
+                "column_id": column_id,
+                "column_username": column_username,
+                "column_tag": column_tag,
+                "column_image1": column_image1,
+                "column_image2": column_image2,
+                "column_image3": column_image3,
+                "column_image4": column_image4,
+                "column_image5": column_image5,
+                "column_image6": column_image6,
+                "column_image7": column_image7,
+                "column_image8": column_image8,
+                "column_image9": column_image9,
+                "column_image10": column_image10,
+                "column_date": column_date
+            }
             }
          }
-with open('column.json', 'w') as d:
-    json.dump(column, d)  # jsonファイル書き込み
+    return jsonify(column, column)  # profile.jsonにjsonデータ返す
+
 
   # アイデア出し系
 def idea():  # 投稿アイデア表示機能
-    idea = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
-    cur = idea.cursor()  # データオープン
-    idea_id = cur.execute("SELECT idea.idea_id FROM idea")  # 抽出
-    idea_username = cur.execute("SELECT idea.idea_username FROM idea")
-    idea_tag = cur.execute("SELECT idea.idea_tag FROM idea")
-    idea_title = cur.execute("SELECT idea.column_image FROM idea")
-    idea_discription = cur.execute("SELECT idea.idea_discription FROM idea")
-    idea_title = cur.execute("SELECT idea.idea_title FROM idea")
-    idea_image = cur.execute("SELECT idea.column_image FROM idea")
-    idea_good = cur.execute("SELCT idea.idea_good FROM idea")  # 貰ったいいね数
-    idea_date = cur.execute("SELECT idea.idea_date FROM idea")
+    #idea = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # 絶対参照
+    #cur = idea.cursor()  # データオープン
+    good_idea_check = session.query("SELECT * FROM idea\
+                                       LEFT OUTER JOIN good_idea\
+                                       ON idea.idea_id = good_idea.good_idea_id\
+                                       WHERE idea.idea_id = 1\
+                                       SELECT COUNT(idea_good) FROM idea")  # いいねした人idといいねされた対象投稿のidを連結したテーブル
+
+    idea_id = session.query("SELECT idea.idea_id FROM idea").all  # 抽出
+    idea_username = session.query("SELECT idea.idea_username FROM idea")
+    idea_tag = session.query("SELECT idea.idea_tag FROM idea")
+    idea_title = session.query("SELECT idea.column_image FROM idea")
+    idea_discription = session.query("SELECT idea.idea_discription FROM idea")
+    idea_title = session.query("SELECT idea.idea_title FROM idea")
+    idea_image = session.query("SELECT idea.column_image FROM idea")
+    idea_good = session.query("SELCT idea.idea_good FROM idea")  # 貰ったいいね数
+    idea_date = session.query("SELECT idea.idea_date FROM idea")
+
     for row in idea:  # 1カードずつjsonでデータ渡す
         idea = {
             "idea": {
-                "idea_id": "idea_id",
-                "idea_username": "idea_username",
-                "idea_tag": "idea_tag",
-                "idea_discription": "idea_discription",
-                "idea_image": "idea_image",
-                "idea_date": "idea_date"
+                "idea_id": idea_id,
+                "idea_username": idea_username,
+                "idea_tag": idea_tag,
+                "idea_discription": idea_discription,
+                "idea_image": idea_image,
+                "good_idea_check": good_idea_check,
+                "idea_date": idea_date
             }
          }
-with open('column.json', 'w') as b:
-    json.dump(column, b)  # jsonファイル書き込み
 
 @app.route("/good_check", methods = ['post'])  #いいね機能
 def good_check():
-    good_person_id = request.form["request_id"]  # いいねリクエストしたユーザidデータ取得
-    good_check = sqlite3.connect(r'C:\Users\matuy\PycharmProjects\product1\models\onegai.db')  # dbは絶対参照
-    cur = good_check.cursor()  # dbオープン
-    good_idea_check = cur.execute("SELECT * FROM idea"
-                                    "LEFT OUTER JOIN good_idea"
-                                    "ON idea.idea_id = good_idea.good_idea_id"
-                                    "WHERE idea.idea_id = 1"
-                                    "SELECT COUNT(idea_good) FROM idea")  #いいねした人idといいねされた対象投稿のidを連結したテーブル
-    #if(good_person_id == idea.idea_id):
-    #delete = good_idea.query.filter_by(good_idea_userid=good_person_id).first()  # リクエスト者idと対になるidを持つレコードを抽出
-    #db_session.delete(delete)  # 消す
-    #db_session.commit()  # 反映
+    good_idea_id = request.form["request_id"]  # いいねリクエストした対象投稿idデータ取得
+    good_idea_userid = request.form["request_idea_id"]  #　いいねリクエストしたユーザidデータ取得
+    good_idea_date = request.form["request_date_id"]  #  いいねリクエストした日時データ取得
 
-#  else:　　#　リストに名前が無かったら、
-         #good_person = (good_idea_id, good_idea_userid, good_idea_date) #いいねリクエスト者データに入れる要素代入（引数は追加したいデータ）
-         #db_session.add(good_person)  # 引数は追加したい変数
-         #db_session.commit()  # 追加データの反映
+    if(good_idea_id == good_idea.good_idea_id and good_idea_userid == good_idea.good_idea_userid):  # いいねした人+いいねした投稿がどちらも一致している
+        delete = good_idea.query.filter_by(good_idea_id == good_idea.good_idea_id and good_idea_userid == good_idea.good_idea_userid).first()  # リクエスト者idと対になるidを持つレコードを抽出
+        db_session.delete(delete)  # 消す
+        db_session.commit()  # 反映
+
+    else:  #　リストに名前が無かったら、
+        good_person = good_idea(good_idea_id=idea.idea_id, good_idea_userid=good_idea_userid, good_idea_date=good_idea_date)  #　いいねリクエスト者データに入れる要素代入（引数は追加したいデータ）
+        db_session.add(good_person)  # 引数は追加したい変数
+        db_session.commit()  # 追加データの反映
+
 
 @app.route("/add", methods=["post"])
 def add():  # データベース内の各項目に入力値の追加
