@@ -1,0 +1,15 @@
+body {
+  /* css-reset */
+  /*padding: 0;
+  margin: 0;*/
+  /* /css-reset */
+  background-color: #DFD7CB;
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 4vh;
+  gap: 4vh;
+}

@@ -1,0 +1,15 @@
+header {
+  background-color: #fff;
+  margin: 0 calc(50% - 50vw);
+}
+
+.gnav {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.pc-nav{
+  width: 100vw;
+}
