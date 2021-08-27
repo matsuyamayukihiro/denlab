@@ -18,7 +18,7 @@ class User(Base):
 
 
 #コラム用
-class column(Base):
+class Columns(Base):
     __tablename__ = 'column'
     column_id = Column(Integer, primary_key=True)   # id
     column_username = Column(String(128), unique=True)  # 投稿ユーザー名
@@ -35,6 +35,25 @@ class column(Base):
     column_image9 = Column(Text)  # 画像（パスで入力）
     column_image10 = Column(Text)  # 画像（パスで入力）
     column_date = Column(DateTime, default=datetime.now())  # 投稿日時
+
+    def toDict(self):
+        return {
+                "column_id": self.column_id,
+                "column_username": self.column_username,
+                "column_tag": self.column_tag,
+                "column_title": self.column_title,
+                "column_image1": self.column_image1,
+                "column_image2": self.column_image2,
+                "column_image3": self.column_image3,
+                "column_image4": self.column_image4,
+                "column_image5": self.column_image5,
+                "column_image6": self.column_image6,
+                "column_image7": self.column_image7,
+                "column_image8": self.column_image8,
+                "column_image9": self.column_image9,
+                "column_image10": self.column_image10,
+                "column_date": self.column_date
+        }
 
 #初期化
     def __init__(self, column_id=None, column_username=None, column_tag=None, column_image1=None, column_image2=None, column_image3=None, column_image4=None, column_image5=None, column_image6=None, column_image7=None, column_image8=None, column_image9=None, column_image10=None, column_date=None):
