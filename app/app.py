@@ -1,205 +1,147 @@
-from flask import Flask, render_template, request, session, redirect, url_for, jsonify
-from sqlalchemy.sql.base import ColumnCollection
-from sqlalchemy import or_,desc
-from models.models import *
-from models.database import db_session
+from sqlalchemy import Column, Integer, String, Text, DateTime  # 何のデータを扱いたいか?でimportするものは変わる
+from models.database import Base
 from datetime import datetime
-from app import key
-from hashlib import sha256
-
-import logging
-
-logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 
-app = Flask(__name__)
-app.secret_key = key.SECRET_KEY
-app.config['JSON_AS_ASCII'] = False  # 日本語を使えるように
+# ログイン用
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)  # id
+    user_name = Column(String(128), unique=True)  # ユーザー名項目
+    hashed_password = Column(String(128))  # セキュリティ化したパスワード
 
-#ログイン系
-@app.route("/login",methods=["post"])  # ログイン機能
-def login():
-    user_name = request.form["user_name"]  # フォームに入力されたユーザ名を取得
-    user = User.query.filter_by(user_name=user_name).first()  # そのユーザ名を持つDBレコードをusersテーブルから抽出しています
-    if user:  # 入力された名前がDBより抽出した時
-        password = request.form["password"]
-        hashed_password = sha256((user_name + password + key.SALT).encode("utf-8")).hexdigest()
-        if user.hashed_password == hashed_password:  # DB内のパス = 入力されたパスがという構図
-            session["user_name"] = user_name  # セッション情報にユーザ名を追加
-            return redirect(url_for("index"))  # メインページへ遷移
-        else:
-            return redirect(url_for("top", status="wrong_password"))
-    else:
-        return redirect(url_for("top", status="user_notfound"))
+    def __init__(self, user_name=None, hashed_password=None):
+        self.user_name = user_name  # 初期化
+        self.hashed_password = hashed_password  # 初期化
 
-@app.route("/newcomer")  # 新規登録機能
-def newcomer():
-    status = request.args.get("status")
-    return render_template("newcomer.html", status=status)
+    def __repr__(self):
+        return '<Name %r>' % self.user_name  # ???
 
-@app.route("/registar", methods=["post"])  # 新規登録機能
-def registar():
-    user_name = request.form["user_name"]  # ユーザ名orメアド登録も可能
-    user = User.query.filter_by(user_name=user_name).first()
-    if user:
-        return redirect(url_for("newcomer", status="exist_user"))
-    else:
-        password = request.form["password"]  # 入力されたパスワードの取得
-        hashed_password = sha256((user_name + password + key.SALT).encode("utf-8")).hexdigest()  # 暗号化している
-        user = User(user_name, hashed_password)
-        db_session.add(user)  # DBに追加(userクラス)　
-        db_session.commit()  # DBに反映
-        session["user_name"] = user_name  # セッション情報にユーザ名を追加
-        return redirect(url_for("index"))  # メインページへ遷移
-
-    user = session.query(User).all()
-    profile_user_name = user.query("SELECT users.user_name FROM users")  # ニックネームデータ抽出
-    profile_hashed_password = user.query("SELECT users.user_name FROM users")  # ハッシュタグデータ抽出
-# フロント受け渡し用jsonファイル作成
-    profile = {
-        {"profile1":
-            {"name": profile_user_name, "pass": profile_hashed_password},
-         "profile2":
-            {"name": profile_user_name, "pass": profile_hashed_password},
-         "profile3":
-            {"name": profile_user_name, "pass": profile_hashed_password}
-         }
-    }
-    return jsonify(profile, profile)  # profile.jsonにjsonデータ返す
-
-@app.route("/logout")
-def logout():
-    session.pop("user_name", None)
-    return redirect(url_for("top", status="logout"))
-
-# トップページ系
-@app.route("/")
-@app.route("/index")
-def index():  # トップページ開く
-    if "user_name" in session:
-        name = session["user_name"]
-        all_onegai = OnegaiContent.query.all()
-        return render_template("index.html", name=name, all_onegai=all_onegai)
-    else:
-        return redirect(url_for("top", status="logout"))
-
-# コラム系
-@app.route("/column")   # コラム表示機能
-def column():
-    # columns = db_session.\
-    #     query(Columns).\
-    #     filter(or_(Columns.column_id == 0,Columns.column_id == 1)).\
-    #     order_by(Columns.column_id).\
-    #     all() # データ取ってくる
-    query = db_session.query(Columns)
-    
-    columns = query.all()
-    count = query.count()
-        
-    
-    list = {}
-    for i,row in enumerate(columns):
-        list["column" + str(i)] = row.toDict() 
-
-    list["count"] = count
-    return jsonify(list)
-
-
-
-  # アイデア出し系
-@app.route("/idea", methods=['post'])  # アイデア表示
-def idea():  # 投稿アイデア表示機能
-    idea = session.query("SELECT idea_id, idea_username, idea_tag, idea_title, idea_discription, idea_image, idea_good, idea_date\
-                        (SELECT count (*) FROM idea WHERE good_idea.good_idea_id=idea.idea_id)as good")  # データ抽出
-    idea = {
-        "idea1": {
-            "idea_id": idea.query.filter_by("SELECT idea_id FROM idea WHERE idea.idea_id=0"),
-            "idea_username": idea.query.filter_by("SELECT idea_username FROM idea WHERE idea.idea_id=0"),
-            "idea_tag": idea.query.filter_by("SELECT idea_tag FROM idea WHERE idea.idea_id=0"),
-            "idea_title": idea.query.filter_by("SELECT idea_title FROM idea WHERE idea.idea_id=0"),
-            "idea_discription": idea.query.filter_by("SELECT idea_discription FROM idea WHERE idea.idea_id=0"),
-            "idea_image": idea.query.filter_by("SELECT idea_image FROM idea WHERE idea.idea_id=0"),
-            "idea_good": idea.query.filter_by("SELECT good FROM idea WHERE idea.idea_id=0"),
-            "idea_date": idea.query.filter_by("SELECT idea_date FROM idea WHERE idea.idea_id=0")
-        },
-        "idea2": {
-            "idea_id": idea.query.filter_by("SELECT idea_id FROM idea WHERE idea.idea_id=1"),
-            "idea_username": idea.query.filter_by("SELECT idea_username FROM idea WHERE idea.idea_id=1"),
-            "idea_tag": idea.query.filter_by("SELECT idea_tag FROM idea WHERE idea.idea_id=1"),
-            "idea_title": idea.query.filter_by("SELECT idea_title FROM idea WHERE idea.idea_id=1"),
-            "idea_discription": idea.query.filter_by("SELECT idea_discription FROM idea WHERE idea.idea_id=1"),
-            "idea_image": idea.query.filter_by("SELECT idea_image FROM idea WHERE idea.idea_id=1"),
-            "idea_good": idea.query.filter_by("SELECT idea_good FROM idea WHERE idea.idea_id=1"),
-            "idea_date": idea.query.filter_by("SELECT idea_date FROM idea WHERE idea.idea_id=1")
-        },
-        "idea3": {
-            "idea_id": idea.query.filter_by("SELECT idea_id FROM idea WHERE idea.idea_id=2"),
-            "idea_username": idea.query.filter_by("SELECT idea_username FROM idea WHERE idea.idea_id=2"),
-            "idea_tag": idea.query.filter_by("SELECT idea_tag FROM idea WHERE idea.idea_id=2"),
-            "idea_title": idea.query.filter_by("SELECT idea_title FROM idea WHERE idea.idea_id=2"),
-            "idea_discription": idea.query.filter_by("SELECT idea_discription FROM idea WHERE idea.idea_id=2"),
-            "idea_image": idea.query.filter_by("SELECT idea_image FROM idea WHERE idea.idea_id=2"),
-            "idea_good": idea.query.filter_by("SELECT idea_good FROM idea WHERE idea.idea_id=2"),
-            "idea_date": idea.query.filter_by("SELECT idea_date FROM idea WHERE idea.idea_id=2")
+    def toDict0(self):
+        return {
+            "user_name": self.user_name,  # 初期化
+            "hashed_password": self.hashed_password  # 初期化
         }
-    }
-    return jsonify(idea)  # jsonデータ返す
-
-@app.route("/good_add", methods=['post'])  # いいね機能
-def good_add():  # 投稿アイデア表示機能
-    good_idea_id = request.form["request_idea_id"]  # いいねリクエストした対象投稿idデータ取得
-    good_idea_userid = request.form["request_idea_userid"]  # いいねリクエストしたユーザidデータ取得
-    good_idea_date = request.form["request_date_id"]  # いいねリクエストした日時データ取得
-    good_idea_check = session.query("SELECT * FROM idea\
-                                    LEFT OUTER JOIN good_idea\
-                                    ON idea.idea_id = good_idea.good_idea_id\
-                                    WHERE idea.idea_id = 0\
-                                    SELECT COUNT(idea.idea_id=good_idea_id) FROM idea")  # いいねした人idといいねされた対象投稿のidを連結したテーブル
-
-    if(good_idea_id == good_idea_check.good_idea_id and good_idea_userid == good_idea_check.good_idea_userid):  # いいねした人+いいねした投稿がどちらも一致している
-        delete = session.query.filter_by(good_idea_id == good_idea.good_idea_id and good_idea_userid == good_idea.good_idea_userid).all()  # リクエスト者idと対になるidを持つレコードを抽出
-        db_session.delete(delete)  # 消す
-        db_session.commit()  # 反映
-
-    else:  #　リストに名前が無かったら、
-        good_person = good_idea(good_idea_id=idea.idea_id, good_idea_userid=good_idea_userid, good_idea_date=good_idea_date)  #　いいねリクエスト者データに入れる要素代入（引数は追加したいデータ）
-        db_session.add(good_person)  # 引数は追加したい変数
-        db_session.commit()  # 追加データの反映
 
 
-@app.route("/add", methods=["post"])
-def add():  # データベース内の各項目に入力値の追加
-    title = request.form["title"]  # HTML内のデータ取得
-    body = request.form["body"]
-    content = OnegaiContent(title, body, datetime.now())  # OnegaiContent=データ追加（引数は追加したいデータ）
-    db_session.add(content)  # 引数は追加したい変数
-    db_session.commit()  # 追加データの反映
-    return redirect(url_for("index"))
+# コラム用
+class Columns(Base):
+    __tablename__ = 'column'
+    column_id = Column(Integer, primary_key=True)  # id
+    column_username = Column(String(128), unique=False)  # 投稿ユーザー名
+    column_tag = Column(Text)  # ジャンル識別タグ
+    column_title = Column(Text(30))  # コラムタイトル
+    column_image1 = Column(Text)  # 画像（パスで入力）
+    column_image2 = Column(Text)  # 画像（パスで入力）
+    column_image3 = Column(Text)  # 画像（パスで入力）
+    column_image4 = Column(Text)  # 画像（パスで入力）
+    column_image5 = Column(Text)  # 画像（パスで入力）
+    column_image6 = Column(Text)  # 画像（パスで入力）
+    column_image7 = Column(Text)  # 画像（パスで入力）
+    column_image8 = Column(Text)  # 画像（パスで入力）
+    column_image9 = Column(Text)  # 画像（パスで入力）
+    column_image10 = Column(Text)  # 画像（パスで入力）
+    column_date = Column(DateTime, default=datetime.now())  # 投稿日時
 
-@app.route("/update", methods=["post"])
-def update():
-    content = OnegaiContent.query.filter_by(id=request.form["update"]).first()
-    content.title = request.form["title"]
-    content.body = request.form["body"]
-    db_session.commit()
-    return redirect(url_for("index"))
+    def toDict(self):
+        return {"column_id": self.column_id,
+                "column_username": self.column_username,
+                "column_tag": self.column_tag,
+                "column_title": self.column_title,
+                "column_image1": self.column_image1,
+                "column_image2": self.column_image2,
+                "column_image3": self.column_image3,
+                "column_image4": self.column_image4,
+                "column_image5": self.column_image5,
+                "column_image6": self.column_image6,
+                "column_image7": self.column_image7,
+                "column_image8": self.column_image8,
+                "column_image9": self.column_image9,
+                "column_image10": self.column_image10,
+                "column_date": self.column_date
+                }
+
+        # 初期化
+
+    def __init__(self, column_id=None, column_username=None, column_tag=None, column_image1=None, column_image2=None,
+                 column_image3=None, column_image4=None, column_image5=None, column_image6=None, column_image7=None,
+                 column_image8=None, column_image9=None, column_image10=None, column_date=None):
+        self.column_id = column_id
+        self.column_username = column_username
+        self.column_tag = column_tag
+        self.column_image1 = column_image1  # 画像（パスで入力）
+        self.column_image2 = column_image2  # 画像（パスで入力）
+        self.column_image3 = column_image3  # 画像（パスで入力）
+        self.column_image4 = column_image4  # 画像（パスで入力）
+        self.column_image5 = column_image5  # 画像（パスで入力）
+        self.column_image6 = column_image6  # 画像（パスで入力）
+        self.column_image7 = column_image7  # 画像（パスで入力）
+        self.column_image8 = column_image8  # 画像（パスで入力）
+        self.column_image9 = column_image9  # 画像（パスで入力）
+        self.column_image10 = column_image10  # 画像（パスで入力）
+        self.column_date = column_date
 
 
-@app.route("/delete", methods=["post"])
-def delete():
-    id_list = request.form.getlist("delete")
-    for id in id_list:
-        content = OnegaiContent.query.filter_by(id=id).first()
-        db_session.delete(content)
-    db_session.commit()
-    return redirect(url_for("index"))
+# アイデア用
+class Ideas(Base):  # アイデア管理用
+    __tablename__ = 'idea'
+    idea_id = Column(Integer, primary_key=True)
+    idea_username = Column(String(128), unique=False)  # ユーザー名項目
+    idea_tag = Column(Text)  # 工芸品ジャンル分けタグ
+    idea_title = Column(Text(30))  # アイデアタイトル
+    idea_discription = Column(Text(300))  # 詳細説明
+    idea_image1 = Column(Text)  # 画像データ
+    idea_good = Column(Integer, unique=False)  # 貰ったいいね数
+    idea_date = Column(DateTime, default=datetime.now())  # 投稿日時
 
-@app.route("/top")
-def top():
-    status = request.args.get("status")
-    return render_template("top.html", status=status)
+    def __init__(self, idea_id=None, idea_username=None, idea_tag="和紙", idea_title=None, idea_discription=None,
+                 idea_image=None, idea_good=None, idea_date=None):
+        self.idea_id = idea_id
+        self.idea_username = idea_username  # ユーザー名項目
+        self.idea_tag = idea_tag  # 工芸品ジャンル分けタグ今回は和紙限定
+        self.idea_title = idea_title  # アイデアタイトル
+        self.idea_discription = idea_discription  # 詳細説明
+        self.idea_image = idea_image  # 画像データ
+        self.idea_good = idea_good  # 貰ったいいね数
+        self.idea_date = idea_date  # 投稿日時
+
+    def toDict2(self):
+        return {
+            "idea_id": self.idea_id,
+            "idea_username": self.idea_username,
+            "idea_tag": self.idea_tag,
+            "idea_title": self.idea_title,
+            "idea_discription": self.idea_discription,
+            "idea_image1": self.idea_image1,
+            "idea_good": self.idea_good,
+            "idea_date": self.idea_date
+        }
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+class Good_ideas(Base):  # いいねチェック用
+    __tablename__ = 'good_idea'
+    good_idea_id = Column(Integer, primary_key=True)  # いいね！した対象投稿のID
+    good_idea_userid = Column(Integer, unique=True)  # いいね！した人自身のID
+    good_idea_date = Column(DateTime, default=datetime.now())  # いいねした日時
+
+    def __init__(self, good_idea_id=None, good_idea_userid=None, good_idea_date=None):
+        self.good_idea_id = good_idea_id
+        self.good_idea_userid = good_idea_userid  # ユーザー名項目
+        self.good_idea_date = good_idea_date  # 工芸品ジャンル分けタグ
+
+
+# 後々消すやつ
+class OnegaiContent(Base):
+    __tablename__ = 'onegaicontents'
+    id = Column(Integer, primary_key=True)  # Column(扱うデータ型,??)  Integer整数型　DB内の行を識別
+    title = Column(String(128), unique=True)
+    body = Column(Text(200))
+    date = Column(DateTime, default=datetime.now())
+
+    def __init__(self, title=None, body=None, date=None):  # カラム内の各値の初期化処理
+        self.title = title
+        self.body = body
+        self.date = date
+
+    def __repr__(self):
+        return '<Title %r>' % self.title
