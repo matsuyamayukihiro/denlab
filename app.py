@@ -4,13 +4,18 @@ from models.database import db_session
 from datetime import datetime
 from app import key
 from hashlib import sha256
+import logging
 
+# 初期設定
 app = Flask(__name__)
 app.secret_key = key.SECRET_KEY
 app.config['JSON_AS_ASCII'] = False  # 日本語を使えるように
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
-#ログイン系
-@app.route("/login",methods=["post"])  # ログイン機能
+
+# ログイン系
+@app.route("/login", methods=["post"])  # ログイン機能
 def login():
     user_name = request.form["user_name"]  # フォームに入力されたユーザ名を取得
     user = User.query.filter_by(user_name=user_name).first()  # そのユーザ名を持つDBレコードをusersテーブルから抽出しています
@@ -45,25 +50,11 @@ def registar():
         session["user_name"] = user_name  # セッション情報にユーザ名を追加
         return redirect(url_for("index"))  # メインページへ遷移
 
-    user = session.query(User).all()
-    profile_user_name = user.query("SELECT users.user_name FROM users")  # ニックネームデータ抽出
-    profile_hashed_password = user.query("SELECT users.user_name FROM users")  # ハッシュタグデータ抽出
-# フロント受け渡し用jsonファイル作成
-    profile = {
-        {"profile1":
-            {"name": profile_user_name, "pass": profile_hashed_password},
-         "profile2":
-            {"name": profile_user_name, "pass": profile_hashed_password},
-         "profile3":
-            {"name": profile_user_name, "pass": profile_hashed_password}
-         }
-    }
-    return jsonify(profile, profile)  # profile.jsonにjsonデータ返す
-
 @app.route("/logout")
 def logout():
     session.pop("user_name", None)
     return redirect(url_for("top", status="logout"))
+
 
 # トップページ系
 @app.route("/")
@@ -76,280 +67,81 @@ def index():  # トップページ開く
     else:
         return redirect(url_for("top", status="logout"))
 
+
 # コラム系
-@app.route("/column")   # コラム表示機能
+@app.route("/column")  # コラム表示機能
 def column():
-    column = session.query(column).all()  # データ取ってくる
-    column = {
-        {"column0": {
-            "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=0"),
-            "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=0"),
-            "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=0"),
-            "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=0"),
-            "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=0"),
-            "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=0"),
-            "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=0"),
-            "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=0"),
-            "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=0"),
-            "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=0"),
-            "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=0"),
-            "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=0"),
-            "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=0"),
-            "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=0"),
-            "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=0")
-            },
-            "column1": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=1"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=1"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=1"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=1"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=1"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=1"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=1"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=1"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=1"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=1"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=1"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=1"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=1"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=1"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=1")
-            },
-            "column2": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=2"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=2"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=2"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=2"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=2"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=2"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=2"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=2"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=2"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=2"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=2"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=2"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=2"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=2"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=2")
-            },
-            "column3": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=3"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=3"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=3"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=3"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=3"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=3"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=3"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=3"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=3"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=3"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=3"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=3"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=3"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=3"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=3")
-            },
-            "column4": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=4"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=4"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=4"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=4"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=4"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=4"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=4"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=4"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=4"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=4"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=4"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=4"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=4"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=4"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=4")
-            },
-            "column5": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=5"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=5"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=5"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=5"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=5"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=5"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=5"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=5"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=5"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=5"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=5"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=5"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=5"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=5"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=5")
-            },
-            "column6": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=6"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=6"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=6"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=6"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=6"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=6"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=6"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=6"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=6"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=6"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=6"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=6"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=6"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=6"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=6")
-            },
-            "column7": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=7"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=7"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=7"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=7"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=7"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=7"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=7"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=7"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=7"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=7"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=7"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=7"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=7"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=7"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=7")
-            },
-            "column8": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=8"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=8"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=8"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=8"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=8"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=8"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=8"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=8"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=8"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=8"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=8"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=8"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=8"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=8"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=8")
-            },
-            "column9": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=9"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=9"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=9"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=9"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=9"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=9"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=9"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=9"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=9"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=9"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=9"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=9"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=9"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=9"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=9")
-            },
-            "column10": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=10"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=10"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=10"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=10"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=10"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=10"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=10"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=10"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=10"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=10"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=10"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=10"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=10"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=10"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=10")
-            },
-            "column11": {
-                "column_id": column.query.filter_by("SELECT column_id FROM column WHERE column.column_id=11"),
-                "column_username": column.query.filter_by("SELECT column_username FROM column WHERE column.column_id=11"),
-                "column_tag": column.query.filter_by("SELECT column_tag FROM column WHERE column.column_id=11"),
-                "column_title": column.query.filter_by("SELECT column_title FROM column WHERE column.column_id=11"),
-                "column_image1": column.query.filter_by("SELECT column_image1 FROM column WHERE column.column_id=11"),
-                "column_image2": column.query.filter_by("SELECT column_image2 FROM column WHERE column.column_id=11"),
-                "column_image3": column.query.filter_by("SELECT column_image3 FROM column WHERE column.column_id=11"),
-                "column_image4": column.query.filter_by("SELECT column_image4 FROM column WHERE column.column_id=11"),
-                "column_image5": column.query.filter_by("SELECT column_image5 FROM column WHERE column.column_id=11"),
-                "column_image6": column.query.filter_by("SELECT column_image6 FROM column WHERE column.column_id=11"),
-                "column_image7": column.query.filter_by("SELECT column_image7 FROM column WHERE column.column_id=11"),
-                "column_image8": column.query.filter_by("SELECT column_image8 FROM column WHERE column.column_id=11"),
-                "column_image9": column.query.filter_by("SELECT column_image9 FROM column WHERE column.column_id=11"),
-                "column_image10": column.query.filter_by("SELECT column_image10 FROM column WHERE column.column_id=11"),
-                "column_date": column.query.filter_by("SELECT column_date FROM column WHERE column.column_id=11")
-            }
+    query = db_session.query(Columns)
+    columns = query.all()
+    count = query.count()
 
-        }
-    }
-    return jsonify(column)  # profile.jsonにjsonデータ返す
+    list_column = {}
+    for i, row in enumerate(columns):
+        list_column["column" + str(i)] = row.toDict()
 
+    list_column["count"] = count
+    list_column['Access-Control-Allow-Origin'] = 'https://denlab.herokuapp.com/column'
+    list_column['Access-Control-Allow-Credentials'] = 'true'
+    return jsonify(list_column)
 
-  # アイデア出し系
-@app.route("/idea", methods=['post'])  # アイデア表示
+# アイデア出し系
+@app.route("/idea")  # アイデア表示
 def idea():  # 投稿アイデア表示機能
-    idea = session.query("SELECT idea_id, idea_username, idea_tag, idea_title, idea_discription, idea_image, idea_good, idea_date\
-                        (SELECT count (*) FROM idea WHERE good_idea.good_idea_id=idea.idea_id)as good")  # データ抽出
-    idea = {
-        "idea1": {
-            "idea_id": idea.query.filter_by("SELECT idea_id FROM idea WHERE idea.idea_id=0"),
-            "idea_username": idea.query.filter_by("SELECT idea_username FROM idea WHERE idea.idea_id=0"),
-            "idea_tag": idea.query.filter_by("SELECT idea_tag FROM idea WHERE idea.idea_id=0"),
-            "idea_title": idea.query.filter_by("SELECT idea_title FROM idea WHERE idea.idea_id=0"),
-            "idea_discription": idea.query.filter_by("SELECT idea_discription FROM idea WHERE idea.idea_id=0"),
-            "idea_image": idea.query.filter_by("SELECT idea_image FROM idea WHERE idea.idea_id=0"),
-            "idea_good": idea.query.filter_by("SELECT good FROM idea WHERE idea.idea_id=0"),
-            "idea_date": idea.query.filter_by("SELECT idea_date FROM idea WHERE idea.idea_id=0")
-        },
-        "idea2": {
-            "idea_id": idea.query.filter_by("SELECT idea_id FROM idea WHERE idea.idea_id=1"),
-            "idea_username": idea.query.filter_by("SELECT idea_username FROM idea WHERE idea.idea_id=1"),
-            "idea_tag": idea.query.filter_by("SELECT idea_tag FROM idea WHERE idea.idea_id=1"),
-            "idea_title": idea.query.filter_by("SELECT idea_title FROM idea WHERE idea.idea_id=1"),
-            "idea_discription": idea.query.filter_by("SELECT idea_discription FROM idea WHERE idea.idea_id=1"),
-            "idea_image": idea.query.filter_by("SELECT idea_image FROM idea WHERE idea.idea_id=1"),
-            "idea_good": idea.query.filter_by("SELECT idea_good FROM idea WHERE idea.idea_id=1"),
-            "idea_date": idea.query.filter_by("SELECT idea_date FROM idea WHERE idea.idea_id=1")
-        },
-        "idea3": {
-            "idea_id": idea.query.filter_by("SELECT idea_id FROM idea WHERE idea.idea_id=2"),
-            "idea_username": idea.query.filter_by("SELECT idea_username FROM idea WHERE idea.idea_id=2"),
-            "idea_tag": idea.query.filter_by("SELECT idea_tag FROM idea WHERE idea.idea_id=2"),
-            "idea_title": idea.query.filter_by("SELECT idea_title FROM idea WHERE idea.idea_id=2"),
-            "idea_discription": idea.query.filter_by("SELECT idea_discription FROM idea WHERE idea.idea_id=2"),
-            "idea_image": idea.query.filter_by("SELECT idea_image FROM idea WHERE idea.idea_id=2"),
-            "idea_good": idea.query.filter_by("SELECT idea_good FROM idea WHERE idea.idea_id=2"),
-            "idea_date": idea.query.filter_by("SELECT idea_date FROM idea WHERE idea.idea_id=2")
-        }
-    }
-    return jsonify(idea)  # jsonデータ返す
+    query = db_session.query(Ideas)
+    ideas = query.all()  # データ抽出
+    count = query.count
+    # データ個数カウント
+    list_idea = {}
+    for i, row1 in enumerate(ideas):
+        list_idea["idea" + str(i)] = row1.toDict()
 
-@app.route("/good_add", methods=['post'])  # いいね機能
+    list_idea["count"] = count
+    return list_idea
+
+
+# いいね機能
 def good_add():  # 投稿アイデア表示機能
     good_idea_id = request.form["request_idea_id"]  # いいねリクエストした対象投稿idデータ取得
     good_idea_userid = request.form["request_idea_userid"]  # いいねリクエストしたユーザidデータ取得
     good_idea_date = request.form["request_date_id"]  # いいねリクエストした日時データ取得
-    good_idea_check = session.query("SELECT * FROM idea\
-                                    LEFT OUTER JOIN good_idea\
-                                    ON idea.idea_id = good_idea.good_idea_id\
-                                    WHERE idea.idea_id = 0\
-                                    SELECT COUNT(idea.idea_id=good_idea_id) FROM idea")  # いいねした人idといいねされた対象投稿のidを連結したテーブル
 
-    if(good_idea_id == good_idea_check.good_idea_id and good_idea_userid == good_idea_check.good_idea_userid):  # いいねした人+いいねした投稿がどちらも一致している
-        delete = session.query.filter_by(good_idea_id == good_idea.good_idea_id and good_idea_userid == good_idea.good_idea_userid).all()  # リクエスト者idと対になるidを持つレコードを抽出
-        db_session.delete(delete)  # 消す
-        db_session.commit()  # 反映
+    # いいねした人idといいねされた対象投稿のidを連結したテーブル
+    if good_idea_userid == Good_ideas.good_idea_userid:
+        if good_idea_id == Good_ideas.good_idea_id:
+            db_session.query(Good_ideas).\
+                filter(good_idea_id == Good_ideas.good_idea_id).\
+                delete()
 
-    else:  #　リストに名前が無かったら、
-        good_person = good_idea(good_idea_id=idea.idea_id, good_idea_userid=good_idea_userid, good_idea_date=good_idea_date)  #　いいねリクエスト者データに入れる要素代入（引数は追加したいデータ）
-        db_session.add(good_person)  # 引数は追加したい変数
-        db_session.commit()  # 追加データの反映
+    else:  # リストに名前が無かったら
+        good_add = Good_ideas(good_idea_id=good_idea_id, good_idea_userid=good_idea_userid,
+                              good_idea_date=good_idea_date)
+        db_session.add(good_add)
+        db_session.commit()
+
+    query = db_session.query(Ideas)
+    counter = query. \
+        filter(Ideas.idea_id == Good_ideas.good_idea_id). \
+        all()
+    count = counter.count(good_idea_id == Good_ideas.good_idea_id)
+    idea_good_add = Ideas(idea_good=count)
+    db_session.add(idea_good_add)
+    db_session.commit()
+
+
+@app.route("/addidea")  # アイデア表示
+def idea_add():  # 投稿アイデア表示機能
+    idea_username = request.form["request_idea_username"]  # いいねリクエストした対象投稿idデータ取得
+    idea_tag = request.form["request_idea_tag"]  # いいねリクエストしたユーザidデータ取得
+    idea_title = request.form["request_idea_title"]  # いいねリクエストした日時データ取得
+    idea_discription = request.form["request_idea_discription"]  # いいねリクエストした日時データ取得
+    idea_image = request.form["request_idea_image"]
+    add_datetime = datetime.now()
+    idea_id = Ideas.count() + 11
+    new_idea_add = Ideas(idea_id=idea_id, idea_username=idea_username, idea_tag=idea_tag, idea_title=idea_title,
+                         idea_discription=idea_discription, idea_image1=idea_image, idea_good=0, idea_date=add_datetime)
+    db_session.add(new_idea_add)
+    db_session.commit()
+    return "登録完了しました!"
 
 
 @app.route("/add", methods=["post"])
@@ -360,6 +152,7 @@ def add():  # データベース内の各項目に入力値の追加
     db_session.add(content)  # 引数は追加したい変数
     db_session.commit()  # 追加データの反映
     return redirect(url_for("index"))
+
 
 @app.route("/update", methods=["post"])
 def update():
@@ -378,6 +171,7 @@ def delete():
         db_session.delete(content)
     db_session.commit()
     return redirect(url_for("index"))
+
 
 @app.route("/top")
 def top():
