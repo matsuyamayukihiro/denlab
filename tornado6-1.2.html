@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/tornado6-1.slide.css">
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css'>
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css'>
+  <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
   <title>Document</title>
 </head>
 
@@ -19,11 +20,15 @@
   <header>
     <nav class="pc-nav">
       <div class="gnav">
-        <div class="oneBox f-01"><h1 class="logo"><a href="#">Logo</a></h1></div>
+        <div class="oneBox f-01">
+          <h1 class="logo"><a href="#">Logo</a></h1>
+        </div>
         <div class="oneBox f-02"><a href="#">コラム</a></div>
         <div class="oneBox f-03"><a href="#">アイデアを出す</a></div>
         <div class="oneBox f-04"><a href="#">商品化</a></div>
-        <div class="oneBox f-05"><h1 class="mypage"><a href="#">ログイン</a></h1></div>
+        <div class="oneBox f-05">
+          <h1 class="mypage"><a href="#">ログイン</a></h1>
+        </div>
       </div>
     </nav>
 
@@ -50,30 +55,90 @@
   <!-- メインコンテンツ表示制御用クラス"container" -->
   <div class="container">
 
-      <!-- スライダー -->
-      <div class="sliderArea">
-        <div class="regular slider">
-          <div><img src="https://125naroom.com/demo/img/itukanokotonokoto01.jpg" alt="125naroom"></div>
-          <div><img src="https://125naroom.com/demo/img/itukanokotonokoto02.jpg" alt="125naroom"></div>
-          <div><img src="https://125naroom.com/demo/img/itukanokotonokoto03.jpg" alt="125naroom"></div>
-          <div><img src="https://125naroom.com/demo/img/itukanokotonokoto04.jpg" alt="125naroom"></div>
-          <div><img src="https://125naroom.com/demo/img/itukanokotonokoto05.jpg" alt="125naroom"></div>
+    <!--
+    <input type="button" value="ボタン1" onclick="clickBtn1()" />
+    <p id="p1">テスト１</p>
+    -->
+
+
+    <!-- スライダー -->
+    <div class="sliderArea">
+      <div class="regular slider">
+        <div><img src="https://drive.google.com/uc?id=19rZLNDpesuM9TX2WkJdK7BWA5_o8SscA"></div>
+        <div><img src="https://drive.google.com/uc?export=view&id=1k_sOIeq2EgtFVDBgzBBq2IwdTRiUGN7H&usp=sharing" alt="コラム1-2"></div>
+        <div><img src="https://125naroom.com/demo/img/itukanokotonokoto03.jpg" alt="125naroom"></div>
+        <div><img src="https://125naroom.com/demo/img/itukanokotonokoto04.jpg" alt="125naroom"></div>
+        <div><img src="https://125naroom.com/demo/img/itukanokotonokoto05.jpg" alt="125naroom"></div>
+      </div>
+    </div>
+
+    <!--
+    <div class="sliderArea">
+      <div class="regular slider">
+        <div><img src="https://drive.google.com/uc?export=view&id=1k_sOIeq2EgtFVDBgzBBq2IwdTRiUGN7H&usp=sharing" alt="125naroom">
+        </div>
+        <div><img src="http://drive.google.com/uc?export=view&id=1hBxfG8L323-u-fMjYBNLlr75K_48eMEu&usp=sharing" alt="125naroom">
+        </div>
+        <div><img src="http://drive.google.com/uc?export=view&id=1k_sOIeq2EgtFVDBgzBBq2IwdTRiUGN7H&usp=sharing" alt="125naroom">
+        </div>
+        <div><img src="http://drive.google.com/uc?export=view&id=1w7Kq1BbHtfcV9hqwwnChzW6FMXwYWTZA&usp=sharing" alt="125naroom">
+        </div>
+        <div><img src="http://drive.google.com/uc?export=view&id=1wiT9UTXqTBSmvmUSEaOhF3oe5m6mLuBP&usp=sharing" alt="125naroom">
         </div>
       </div>
+    </div>
+  -->
 
     <!-- ここにカードデザインを作成する -->
     <div id="cardlayout-wrap"></div>
 
   </div>
 
+  <div id="innerScript"></div>
+  <!--
+  <script>
+    //初期表示は非表示
+    document.getElementById("p1").style.display = "none";
+
+    function clickBtn1() {
+      const p1 = document.getElementById("p1");
+
+      if (p1.style.display == "block") {
+        // noneで非表示
+        p1.style.display = "none";
+      } else {
+        // blockで表示
+        p1.style.display = "block";
+      }
+    }
+  </script>
+  -->
+
+
 
 
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
   <script src='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js'></script>
+  <script type="text/javascript" src="/js/tornado6-1.query.js"></script>
   <script type="text/javascript" src="/js/tornado6-1.slide.js"></script>
   <script type="text/javascript" src="/js/tornado6-1.card.js"></script>
-  <script type="text/javascript" src="/js/tornado6-1.query.js"></script>
+  <!--<script type="text/javascript" src="/js/torunado6-1.addUrlParam.js"></script>-->
+  <script>
+    //初期表示は非表示
+    document.getElementById("hide100").style.display = "none";
 
+    function clickBtn100() {
+      const p1 = document.getElementById("hide100");
+
+      if (p1.style.display == "block") {
+        // noneで非表示
+        p1.style.display = "none";
+      } else {
+        // blockで表示
+        p1.style.display = "block";
+      }
+    }
+  </script>
 </body>
 
 </html>

@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
   console.log('lib', getParam('lib')); //「jquery」を出力
   console.log('ver', getParam('ver')); // 「3」を出力
 
+  console.log('location.href', location.href);
+
   /**
    * Get the URL parameter value
    *
