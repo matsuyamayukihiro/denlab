@@ -95,6 +95,18 @@ class Ideas(Base):  # アイデア管理用
     idea_good = Column(Integer, unique=False)  # 貰ったいいね数
     idea_date = Column(DateTime, default=datetime.now())  # 投稿日時
 
+    def toDict1(self):
+        return {
+            "idea_id": self.idea_id,
+            "idea_username": self.idea_username,
+            "idea_tag": self.idea_tag,
+            "idea_title": self.idea_title,
+            "idea_discription": self.idea_discription,
+            "idea_image1": self.idea_image1,
+            "idea_good": self.idea_good,
+            "idea_date": self.idea_date
+            }
+
     def __init__(self, idea_id=None, idea_username=None, idea_tag="和紙", idea_title=None, idea_discription=None,
                  idea_image=None, idea_good=None, idea_date=None):
         self.idea_id = idea_id
@@ -106,17 +118,7 @@ class Ideas(Base):  # アイデア管理用
         self.idea_good = idea_good  # 貰ったいいね数
         self.idea_date = idea_date  # 投稿日時
 
-    def toDict(self):
-        return {
-            "idea_id": self.idea_id,
-            "idea_username": self.idea_username,
-            "idea_tag": self.idea_tag,
-            "idea_title": self.idea_title,
-            "idea_discription": self.idea_discription,
-            "idea_image1": self.idea_image1,
-            "idea_good": self.idea_good,
-            "idea_date": self.idea_date
-            }
+
 
 
 class Good_ideas(Base):  # いいねチェック用
