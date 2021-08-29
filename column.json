@@ -1,9 +1,0 @@
-{
-  "column": {
-    "column_id": "column.column_id",
-    "column_username": "column.column_username",
-    "column_tag": "column.column_tag",
-    "column_image": "column.column_image",
-    "column_date": "column.column_date"
-  }
-}
