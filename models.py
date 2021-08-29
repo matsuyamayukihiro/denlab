@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, DateTime  # 何のデー�
 from models.database import Base
 from datetime import datetime
 
+
 # ログイン用
 class User(Base):
     __tablename__ = 'users'
@@ -14,17 +15,23 @@ class User(Base):
         self.hashed_password = hashed_password  # 初期化
 
     def __repr__(self):
-        return '<Name %r>' % (self.user_name)  # ???
+        return '<Name %r>' % self.user_name  # ???
+
+    def toDict0(self):
+        return {
+            "user_name": self.user_name,  # 初期化
+            "hashed_password": self.hashed_password  # 初期化
+        }
 
 
-#コラム用
-class column(Base):
+# コラム用
+class Columns(Base):
     __tablename__ = 'column'
-    column_id = Column(Integer, primary_key=True)   # id
-    column_username = Column(String(128), unique=True)  # 投稿ユーザー名
+    column_id = Column(Integer, primary_key=True)  # id
+    column_username = Column(String(128), unique=False)  # 投稿ユーザー名
     column_tag = Column(Text)  # ジャンル識別タグ
     column_title = Column(Text(30))  # コラムタイトル
-    column_image1 = Column(Text) # 画像（パスで入力）
+    column_image1 = Column(Text)  # 画像（パスで入力）
     column_image2 = Column(Text)  # 画像（パスで入力）
     column_image3 = Column(Text)  # 画像（パスで入力）
     column_image4 = Column(Text)  # 画像（パスで入力）
@@ -36,8 +43,30 @@ class column(Base):
     column_image10 = Column(Text)  # 画像（パスで入力）
     column_date = Column(DateTime, default=datetime.now())  # 投稿日時
 
-#初期化
-    def __init__(self, column_id=None, column_username=None, column_tag=None, column_image1=None, column_image2=None, column_image3=None, column_image4=None, column_image5=None, column_image6=None, column_image7=None, column_image8=None, column_image9=None, column_image10=None, column_date=None):
+    def toDict(self):
+        return {"column_id": self.column_id,
+                "column_username": self.column_username,
+                "column_tag": self.column_tag,
+                "column_title": self.column_title,
+                "column_image1": self.column_image1,
+                "column_image2": self.column_image2,
+                "column_image3": self.column_image3,
+                "column_image4": self.column_image4,
+                "column_image5": self.column_image5,
+                "column_image6": self.column_image6,
+                "column_image7": self.column_image7,
+                "column_image8": self.column_image8,
+                "column_image9": self.column_image9,
+                "column_image10": self.column_image10,
+                "column_date": self.column_date
+                }
+
+
+        # 初期化
+
+    def __init__(self, column_id=None, column_username=None, column_tag=None, column_image1=None, column_image2=None,
+                 column_image3=None, column_image4=None, column_image5=None, column_image6=None, column_image7=None,
+                 column_image8=None, column_image9=None, column_image10=None, column_date=None):
         self.column_id = column_id
         self.column_username = column_username
         self.column_tag = column_tag
@@ -55,18 +84,19 @@ class column(Base):
 
 
 # アイデア用
-class idea(Base):  # アイデア管理用
+class Ideas(Base):  # アイデア管理用
     __tablename__ = 'idea'
     idea_id = Column(Integer, primary_key=True)
-    idea_username = Column(String(128), unique=True)  # ユーザー名項目
+    idea_username = Column(String(128), unique=False)  # ユーザー名項目
     idea_tag = Column(Text)  # 工芸品ジャンル分けタグ
     idea_title = Column(Text(30))  # アイデアタイトル
     idea_discription = Column(Text(300))  # 詳細説明
-    idea_image = Column(Text)  # 画像データ
+    idea_image1 = Column(Text)  # 画像データ
     idea_good = Column(Integer, unique=False)  # 貰ったいいね数
     idea_date = Column(DateTime, default=datetime.now())  # 投稿日時
 
-    def __init__(self, idea_id=None, idea_username=None, idea_tag="和紙", idea_title=None, idea_discription=None, idea_image=None, idea_good=None, idea_date=None):
+    def __init__(self, idea_id=None, idea_username=None, idea_tag="和紙", idea_title=None, idea_discription=None,
+                 idea_image=None, idea_good=None, idea_date=None):
         self.idea_id = idea_id
         self.idea_username = idea_username  # ユーザー名項目
         self.idea_tag = idea_tag  # 工芸品ジャンル分けタグ今回は和紙限定
@@ -76,7 +106,20 @@ class idea(Base):  # アイデア管理用
         self.idea_good = idea_good  # 貰ったいいね数
         self.idea_date = idea_date  # 投稿日時
 
-class good_idea(Base):#いいねチェック用
+    def toDict(self):
+        return {
+            "idea_id": self.idea_id,
+            "idea_username": self.idea_username,
+            "idea_tag": self.idea_tag,
+            "idea_title": self.idea_title,
+            "idea_discription": self.idea_discription,
+            "idea_image1": self.idea_image1,
+            "idea_good": self.idea_good,
+            "idea_date": self.idea_date
+            }
+
+
+class Good_ideas(Base):  # いいねチェック用
     __tablename__ = 'good_idea'
     good_idea_id = Column(Integer, primary_key=True)  # いいね！した対象投稿のID
     good_idea_userid = Column(Integer, unique=True)  # いいね！した人自身のID
@@ -86,6 +129,7 @@ class good_idea(Base):#いいねチェック用
         self.good_idea_id = good_idea_id
         self.good_idea_userid = good_idea_userid  # ユーザー名項目
         self.good_idea_date = good_idea_date  # 工芸品ジャンル分けタグ
+
 
 # 後々消すやつ
 class OnegaiContent(Base):
@@ -101,4 +145,4 @@ class OnegaiContent(Base):
         self.date = date
 
     def __repr__(self):
-        return '<Title %r>' % (self.title)
+        return '<Title %r>' % self.title
