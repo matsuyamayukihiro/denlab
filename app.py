@@ -10,8 +10,15 @@ import logging
 app = Flask(__name__)
 app.secret_key = key.SECRET_KEY
 app.config['JSON_AS_ASCII'] = False  # 日本語を使えるように
+app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
+
+# トップページ
+@app.route("/")
+def first():
+    return render_template("tornado6-1.2.html")
 
 
 # ログイン系
@@ -30,10 +37,12 @@ def login():
     else:
         return redirect(url_for("top", status="user_notfound"))
 
+
 @app.route("/newcomer")  # 新規登録機能
 def newcomer():
     status = request.args.get("status")
     return render_template("newcomer.html", status=status)
+
 
 @app.route("/registar", methods=["post"])  # 新規登録機能
 def registar():
@@ -50,6 +59,7 @@ def registar():
         session["user_name"] = user_name  # セッション情報にユーザ名を追加
         return redirect(url_for("index"))  # メインページへ遷移
 
+
 @app.route("/logout")
 def logout():
     session.pop("user_name", None)
@@ -57,13 +67,13 @@ def logout():
 
 
 # トップページ系
-@app.route("/")
+
 @app.route("/index")
 def index():  # トップページ開く
     if "user_name" in session:
         name = session["user_name"]
         all_onegai = OnegaiContent.query.all()
-        return render_template("index.html", name=name, all_onegai=all_onegai)
+        return render_template("top", name=name, all_onegai=all_onegai)
     else:
         return redirect(url_for("top", status="logout"))
 
@@ -80,23 +90,26 @@ def column():
         list_column["column" + str(i)] = row.toDict()
 
     list_column["count"] = count
-    list_column['Access-Control-Allow-Origin'] = 'https://denlab.herokuapp.com/column'
-    list_column['Access-Control-Allow-Credentials'] = 'true'
     return jsonify(list_column)
+
+
+#    list_column['Access-Control-Allow-Origin'] = 'https://denlab.herokuapp.com/column'
+#   list_column['Access-Control-Allow-Credentials'] = 'true'
+
 
 # アイデア出し系
 @app.route("/idea")  # アイデア表示
 def idea():  # 投稿アイデア表示機能
     query = db_session.query(Ideas)
     ideas = query.all()  # データ抽出
-    count = query.count
+    count = query.count()
     # データ個数カウント
     list_idea = {}
     for i, row1 in enumerate(ideas):
-        list_idea["idea" + str(i)] = row1.toDict()
+        list_idea["idea" + str(i)] = row1.toDict1()
 
     list_idea["count"] = count
-    return list_idea
+    return jsonify(list_idea)
 
 
 # いいね機能
@@ -108,8 +121,8 @@ def good_add():  # 投稿アイデア表示機能
     # いいねした人idといいねされた対象投稿のidを連結したテーブル
     if good_idea_userid == Good_ideas.good_idea_userid:
         if good_idea_id == Good_ideas.good_idea_id:
-            db_session.query(Good_ideas).\
-                filter(good_idea_id == Good_ideas.good_idea_id).\
+            db_session.query(Good_ideas). \
+                filter(good_idea_id == Good_ideas.good_idea_id). \
                 delete()
 
     else:  # リストに名前が無かったら
