@@ -24,11 +24,13 @@
 
 /*-----------矢印表示----------*/
 .slick-next {
-  right: 5%!important;/*矢印の位置調整*/
+  right: 5% !important;
+  /*矢印の位置調整*/
 }
 
 .slick-prev {
-  left: 5%!important;/*矢印の位置調整*/
+  left: 5% !important;
+  /*矢印の位置調整*/
 }
 
 .slick-arrow {
@@ -44,7 +46,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  opacity:1!important;
+  opacity: 1 !important;
 }
 
 .slick-next:before {
@@ -184,3 +186,9 @@ body {
 }
 
 /* /codepen */
+
+/* ここから08/30追加 */
+.slick-dots {
+  position: initial;
+}
+/* ここまで08/30追加 */

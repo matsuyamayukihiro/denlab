@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--<link rel="stylesheet" href="./css/tornado6-1.main.css">
+  <link rel="stylesheet" href="./css/tornado6-1.header.ver2.css">
+  <link rel="stylesheet" href="./css/tornado6-1.slide.css">
+  <link rel="stylesheet" href="./css/tornado6-1.footer.css">-->
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css'>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css'>
+  <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+  <title>でんらぼ</title>
+  <!-- ここからcssゴリ押し -->
+  <style>
+    /* ここからmain.css */
+    body {
+      background-color: #DFD7CB;
+      overflow-x: hidden;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: #333;
+      text-decoration: none;
+    }
+
+    /* ここまでmain.css */
+  </style>
+  <style>
+    /* ここからheader.ver2.css */
+    header {
+      /*background-color: #fff;*/
+      margin: 0 calc(50% - 50vw);
+      display: flex;
+      align-items: center;
+    }
+
+    .pc-nav {
+      width: 100vw;
+    }
+
+    .gnav {
+      width: 100vw;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      /*justify-content: space-around;*/
+    }
+
+    .oneBox {
+      max-width: 100%;
+      max-height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /*position: relative;*/
+    }
+
+    .oneBox a {
+      /*display: block;*/
+      font-size: x-large;
+    }
+
+    .oneBox a img {
+      width: 40px;
+    }
+
+    .f-01 {
+      background: #DFD7CB;
+      flex: 3;
+    }
+
+    .f-02,
+    .f-03,
+    .f-04,
+    .f-05 {
+      flex: 1;
+    }
+
+    .logo a img {
+      max-width: 100%;
+      height: auto;
+      width
+      /***/
+      : auto;
+      /*background: #eee;*/
+      /*padding: 10px 20px;*/
+      display: inline-block;
+    }
+
+    /* ここまでheader.ver2.css */
+  </style>
+  <style>
+    /* ここからslide.css */
+    .slider {
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+
+    .slider img {
+      height: auto;
+      width: 100%;
+    }
+
+    /*slick setting*/
+    .slick-prev:before,
+    .slick-next:before {
+      color: #000;
+    }
+
+    /*-----------height調整----------*/
+    .slick-slide {
+      height: auto !important;
+    }
+
+    /*-----------矢印表示----------*/
+    .slick-next {
+      right: 5% !important;
+      /*矢印の位置調整*/
+    }
+
+    .slick-prev {
+      left: 5% !important;
+      /*矢印の位置調整*/
+    }
+
+    .slick-arrow {
+      z-index: 2 !important;
+      width: 60px !important;
+      height: 60px !important;
+    }
+
+    .slick-arrow:before {
+      content: "" !important;
+      width: 100% !important;
+      height: 100% !important;
+      position: initial;
+      top: 0;
+      left: 0;
+      opacity: 1 !important;
+    }
+
+    .slick-next:before {
+      background: url(https://drive.google.com/uc?id=16hMIOktPjbTUv0lfFPfq8i-_ec9aVvf4) !important;
+      background-size: contain !important;
+    }
+
+    .slick-prev:before {
+      background: url(https://drive.google.com/uc?id=1Tc7D-xCEcAHFwSs-X1HhTi3Qduy9sV-9) !important;
+      background-size: contain !important;
+    }
+
+    /*------------------------------*/
+
+
+
+    /* codepen */
+    /*https://codepen.io/125naroom/pen/RwbOMdN*/
+    /*====================================================================
+slick
+====================================================================*/
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .sliderArea {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0 25px;
+    }
+
+    .sliderArea.w300 {
+      max-width: 300px;
+    }
+
+    .slick-slide {
+      margin: 0 5px;
+    }
+
+    .slick-slide img {
+      width: 100%;
+      height: auto;
+    }
+
+    .slick-prev,
+    .slick-next {
+      z-index: 1;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+      color: #000;
+    }
+
+    .slick-slide {
+      transition: all ease-in-out .3s;
+      opacity: .2;
+    }
+
+    .slick-active {
+      opacity: 1;
+    }
+
+    .slick-current {
+      opacity: 1;
+    }
+
+    .thumb {
+      margin: 20px 0 0;
+    }
+
+    .thumb .slick-slide {
+      cursor: pointer;
+    }
+
+    .thumb .slick-slide:hover {
+      opacity: .7;
+    }
+
+    /*====================================================================
+以下は不要です。
+====================================================================*/
+    body {
+      font-family: YuGothic, "游ゴシック体", "Yu Gothic", "ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+      font-size: 16px;
+      letter-spacing: .025em;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    @media screen and (max-width: 1024px) {
+      body {
+        font-size: 14px;
+      }
+    }
+
+    .section {
+      /*max-width: 700px;*/
+      /*min-height: 100vh;*/
+      width: 100vw;
+      height: auto;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 30px 0;
+    }
+
+    .section p._a {
+      font-size: 12px;
+      font-weight: bold;
+      margin: 30px 0 0;
+    }
+
+    .section p._a .link {
+      display: inline-block;
+      color: #607D8B;
+      padding-left: 1.3em;
+      text-indent: -1.3em;
+    }
+
+    .section p._a .link:before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-top: 2px solid #607D8B;
+      border-right: 2px solid #607D8B;
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+      margin-right: 10px;
+    }
+
+    /* /codepen */
+
+    /* ここから08/30追加 */
+    .slick-dots {
+      position: initial;
+    }
+
+    /* ここまで08/30追加 */
+    /* ここまでslide.css */
+  </style>
+  <style>
+    /* ここからfooter.css */
+    footer {
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 3%;
+    }
+
+    footer h3 {
+      font-size: xx-large;
+    }
+
+    .footerList {
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .footerList div {
+      font-size: large;
+    }
+
+    /* ここまでfooter.css */
+  </style>
+  <style>
+    /* ここからlink.css */
+    .messageboard {
+      width: 75%;
+      /*横幅*/
+      height: auto;
+      /*高さ*/
+      background-color: #fffff0;
+      padding: 20px 40px 10px 30px;
+      margin: 0 auto;
+      margin-bottom: 5%;
+      border: 1px bottom #ffffe0;
+    }
+
+    /* ここまでlink.css */
+  </style>
+  <!-- ここまでcssゴリ押し -->
+</head>
+
+<body>
+  <header>
+    <nav class="pc-nav">
+      <div class="gnav">
+        <div class="oneBox f-01">
+          <div class="logo"><a href="https://denlab.herokuapp.com"><img
+                src="https://drive.google.com/uc?id=1XT8nwvnJUr0W8I2SOfVU7hJD_sSc4vxQ"></a>
+          </div>
+        </div>
+        <div class="oneBox f-02"><a href="https://denlab.herokuapp.com/column"><img
+              src="https://drive.google.com/uc?id=1UIhTz1DH3ULjMRR2BBH0Qx7Kum6_MoQV" alt="コラム">
+            <div>コラム</div>
+          </a></div>
+        <div class="oneBox f-03"><a href="https://denlab.herokuapp.com/idea"><img
+              src="https://drive.google.com/uc?id=1I5E10qtmE2dfhGJkYKpZjFSifbx2dDk5" alt="アイデア">
+            <div>アイデア</div>
+          </a></div>
+        <div class="oneBox f-04"><a href="https://denlab.base.shop/"><img
+              src="https://drive.google.com/uc?id=1ykhKNiu3NZ74DlyUbDjik6JiEHGcb4gN" alt="商品化">
+            <div>商品化</div>
+          </a></div>
+        <div class="oneBox f-05">
+          <h1 class="mypage"><a href="#">ログイン</a></h1>
+        </div>
+      </div>
+    </nav>
+
+  </header>
+
+  <!-- メインコンテンツ表示制御用クラス"container" -->
+  <div class="container">
+
+
+    <!-- スライダー -->
+    <div class="sliderArea">
+      <div class="regular slider">
+        <div><img src="https://drive.google.com/uc?id=19rZLNDpesuM9TX2WkJdK7BWA5_o8SscA" alt="コラム1-1"></div>
+        <div><img src="https://drive.google.com/uc?export=view&id=1k_sOIeq2EgtFVDBgzBBq2IwdTRiUGN7H&usp=sharing"
+            alt="コラム1-2"></div>
+        <div><img src="https://drive.google.com/uc?id=1bEFK3HDNzRCQL12uCqtXo5D6Gi1iR0hw" alt="コラム1-3">
+        </div>
+        <div><img src="https://drive.google.com/uc?id=167lAvTxd1YvfmDoI-ipRa8IcQwLE6G17" alt="コラム1-4">
+        </div>
+        <div><img src="https://drive.google.com/uc?id=1oVSmU1oz_bvs6akTDnGNDQLwT_rKDh4_" alt="コラム1-5">
+        </div>
+      </div>
+    </div>
+
+    <div class="messageboard">
+      <p class="welcome">リンク</p>
+      <p class="massage">
+       https://<br>
+       https://<br>
+       https://<br>
+      </p>
+      <br>
+      <p class="massage">
+        <small></small><br>
+      </p>
+    </div>
+
+
+
+  </div>
+
+  <div id="innerScript"></div>
+
+  <footer>
+    <h3><a href="https://denlab.herokuapp.com">denlabo</a></h3>
+    <div class="footerList">
+      <div><a href="https://denlab.herokuapp.com">ホーム</a></div>
+      <div><a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSf_VKM1slFchryKS_UGxZD4q4TwhvwEWQUGDClLKt3DgndusQ/viewform?usp=sf_link">お問い合わせ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    console.warn("ゴリ押しバージョンです。");
+  </script>
+
+
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js'></script>
+  <script>
+    /* ここからslide.js */
+    $(document).on('ready', function () {
+      $(".regular").slick({
+        autoplay: true, //自動再生する
+        autoplaySpeed: 4000, //自動再生のスピード
+        speed: 800, //スライドするスピード
+        dots: true, //スライドしたときのドット
+        arrows: true, //左右の矢印
+        Infinity: true, //スライドのループ
+        pauseOnHover: true, //マウスホバーした時にスライドを一時停止する
+      });
+    });
+    /* ここまでslide.js */
+  </script>
+</body>
+
+</html>
