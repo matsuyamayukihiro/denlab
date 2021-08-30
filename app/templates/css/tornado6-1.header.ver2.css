@@ -1,0 +1,38 @@
+header {
+  background-color: #fff;
+  margin: 0 calc(50% - 50vw);
+
+}
+
+.gnav {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  /*justify-content: space-around;*/
+}
+
+.pc-nav {
+  width: 100vw;
+}
+
+.oneBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*position: relative;*/
+}
+
+.oneBox a{
+  /*display: block;*/
+  font-size: x-large;
+}
+
+.oneBox a img{
+  width: 40px;
+}
+
+.f-01 {
+  background: #DFD7CB;
+}

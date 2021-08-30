@@ -10,6 +10,6 @@ body {
 .container {
   display: flex;
   flex-direction: column;
-  padding: 4vh;
-  gap: 4vh;
+  /*padding: 4vh;
+  gap: 4vh;*/
 }

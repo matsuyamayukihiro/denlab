@@ -5,11 +5,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/tornado6-1.main.css">
+  <!--<link rel="stylesheet" href="css/reset.css">-->
+  <link rel="stylesheet" href="./css/tornado6-1.main.css">
   <!--<link rel="stylesheet" href="css/tornado6-1.header.css">-->
-  <link rel="stylesheet" href="css/tornado6-1.header.ver2.css">
-  <link rel="stylesheet" href="css/tornado6-1.card.css">
-  <link rel="stylesheet" href="css/tornado6-1.slide.css">
+  <link rel="stylesheet" href="./css/tornado6-1.header.ver2.css">
+  <link rel="stylesheet" href="./css/tornado6-1.card.css">
+  <link rel="stylesheet" href="./css/tornado6-1.slide.css">
+  <link rel="stylesheet" href="./css/tornado6-1.footer.css">
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css'>
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css'>
   <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
@@ -21,11 +23,18 @@
     <nav class="pc-nav">
       <div class="gnav">
         <div class="oneBox f-01">
-          <h1 class="logo"><a href="#">Logo</a></h1>
+          <h1 class="logo"><a href="https://denlab.herokuapp.com"><img src="./images/logo-denlabo.png"></a></h1>
         </div>
-        <div class="oneBox f-02"><a href="#">コラム</a></div>
-        <div class="oneBox f-03"><a href="#">アイデアを出す</a></div>
-        <div class="oneBox f-04"><a href="#">商品化</a></div>
+        <div class="oneBox f-02"><a href="https://denlab.herokuapp.com/column"><img src="images/icon-column.svg"
+              alt="コラム">
+            <div>コラム</div>
+          </a></div>
+        <div class="oneBox f-03"><a href="https://denlab.herokuapp.com/idea"><img src="images/icon-idea.svg" alt="アイデア">
+            <div>アイデア</div>
+          </a></div>
+        <div class="oneBox f-04"><a href="https://denlab.base.shop/"><img src="images/icon-product.svg" alt="商品化">
+            <div>商品化</div>
+          </a></div>
         <div class="oneBox f-05">
           <h1 class="mypage"><a href="#">ログイン</a></h1>
         </div>
@@ -55,17 +64,13 @@
   <!-- メインコンテンツ表示制御用クラス"container" -->
   <div class="container">
 
-    <!--
-    <input type="button" value="ボタン1" onclick="clickBtn1()" />
-    <p id="p1">テスト１</p>
-    -->
-
 
     <!-- スライダー -->
     <div class="sliderArea">
       <div class="regular slider">
         <div><img src="https://drive.google.com/uc?id=19rZLNDpesuM9TX2WkJdK7BWA5_o8SscA"></div>
-        <div><img src="https://drive.google.com/uc?export=view&id=1k_sOIeq2EgtFVDBgzBBq2IwdTRiUGN7H&usp=sharing" alt="コラム1-2"></div>
+        <div><img src="https://drive.google.com/uc?export=view&id=1k_sOIeq2EgtFVDBgzBBq2IwdTRiUGN7H&usp=sharing"
+            alt="コラム1-2"></div>
         <div><img src="https://125naroom.com/demo/img/itukanokotonokoto03.jpg" alt="125naroom"></div>
         <div><img src="https://125naroom.com/demo/img/itukanokotonokoto04.jpg" alt="125naroom"></div>
         <div><img src="https://125naroom.com/demo/img/itukanokotonokoto05.jpg" alt="125naroom"></div>
@@ -114,14 +119,22 @@
   </script>
   -->
 
+  <footer>
+    <h3><a href="https://denlab.herokuapp.com">denlobo</a></h3>
+    <div class="footerList">
+      <div><a href="https://denlab.herokuapp.com">ホーム</a></div>
+      <div><a href="https://docs.google.com/forms/d/e/1FAIpQLSf_VKM1slFchryKS_UGxZD4q4TwhvwEWQUGDClLKt3DgndusQ/viewform?usp=sf_link">お問い合わせ</a></div>
+    </div>
+  </footer>
+
 
 
 
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
   <script src='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js'></script>
-  <script type="text/javascript" src="/js/tornado6-1.query.js"></script>
-  <script type="text/javascript" src="/js/tornado6-1.slide.js"></script>
-  <script type="text/javascript" src="/js/tornado6-1.card.js"></script>
+  <script type="text/javascript" src="./js/tornado6-1.query.js"></script>
+  <script type="text/javascript" src="./js/tornado6-1.slide.js"></script>
+  <script type="text/javascript" src="./js/tornado6-1.card.js"></script>
   <!--<script type="text/javascript" src="/js/torunado6-1.addUrlParam.js"></script>-->
   <script>
     //初期表示は非表示

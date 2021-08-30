@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
       //非同期で通信失敗時に読み出される
-      console.log('Error : ' + errorThrown);
+      console.error('ajaxError : ' + errorThrown);
     }
   });
 
@@ -137,11 +137,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const res = await window.fetch(USERS_API);
     const users = await res.json();
 
-    //var arr = JSON.parse(users);
+    var arr = JSON.parse(users);
     //var arr = JSON.parse(json_text);
     //console.log(users);
     console.log("以下jsonテスト1");
-    console.log(users);
+    console.log("users" , users);
+    console.log("arr" , arr);
 
     console.log("以下jsonテスト2");
     for (var item in users) {
@@ -155,8 +156,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   }
 
-  //console.log("以下callApi");
-  //callApi();
+  console.log("以下callApi");
+  callApi();
 
   //APIからJSONデータを取得する
   fetch(url)
