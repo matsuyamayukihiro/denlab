@@ -1,3 +1,4 @@
+from urllib import response
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from models.models import *
 from models.database import db_session
@@ -67,20 +68,21 @@ def logout():
 
 
 # トップページ系
-
 @app.route("/index")
 def index():  # トップページ開く
     if "user_name" in session:
         name = session["user_name"]
         all_onegai = OnegaiContent.query.all()
-        return render_template("top", name=name, all_onegai=all_onegai)
+        return render_template("index", name=name, all_onegai=all_onegai)
     else:
         return redirect(url_for("top", status="logout"))
 
 
 # コラム系
-@app.route("/column")  # コラム表示機能
+@app.route("/column", methods=["POST", "GET"])  # コラム表示機能
 def column():
+    # response['Access-Control-Allow-Origin'] = '*'
+    # response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
     query = db_session.query(Columns)
     columns = query.all()
     count = query.count()
@@ -90,15 +92,11 @@ def column():
         list_column["column" + str(i)] = row.toDict()
 
     list_column["count"] = count
-    return jsonify(list_column)
-
-
-#    list_column['Access-Control-Allow-Origin'] = 'https://denlab.herokuapp.com/column'
-#   list_column['Access-Control-Allow-Credentials'] = 'true'
+    return jsonify(ResultSet=list_column)
 
 
 # アイデア出し系
-@app.route("/idea")  # アイデア表示
+@app.route("/idea", methods=["POST", "GET"])  # アイデア表示
 def idea():  # 投稿アイデア表示機能
     query = db_session.query(Ideas)
     ideas = query.all()  # データ抽出
@@ -109,7 +107,7 @@ def idea():  # 投稿アイデア表示機能
         list_idea["idea" + str(i)] = row1.toDict1()
 
     list_idea["count"] = count
-    return jsonify(list_idea)
+    return jsonify(ResultSet=list_idea)
 
 
 # いいね機能
