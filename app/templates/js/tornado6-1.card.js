@@ -64,7 +64,7 @@ function setIdeaCard(id, username, tag, title, discription, image, good) {
     //初期表示は非表示
     document.getElementById("` + `hide` + id + `").style.display = "none";
 
-    window.clickBtn` + id + ` =function clickBtn` + id + `() {
+    window.clickBtn` + id + ` =function() {
       const p1 = document.getElementById("` + `hide` + id + `");
 
       if (p1.style.display == "block") {

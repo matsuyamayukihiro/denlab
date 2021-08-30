@@ -13,3 +13,8 @@ body {
   /*padding: 4vh;
   gap: 4vh;*/
 }
+
+a {
+  color: #333;
+  text-decoration: none;
+}

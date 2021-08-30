@@ -79,57 +79,6 @@ a.card-link {
   }
 }
 
-
-
-
-/* header */
-
-body {
-	margin: 0;
-	padding: 10px;
-}
-ul {
-	padding: 0;
-	margin: 0;
-}
-li {
-	list-style-type: none;
-}
-a {
-	color: #333;
-	text-decoration: none;
-}
-
-
-header {
-	display: flex;
-	align-items: center;
-}
-.logo {
-	background: #eee;
-	padding: 10px 20px;
-	display: inline-block;
-}
-nav {
-	margin: 0 auto;
-}
-nav ul {
-	display: flex;
-}
-nav ul li a {
-	padding: 0 20px;
-}
-.btn {
-	color: #fff;
-	background: #333;
-	padding: 10px 40px;
-	display: inline-block;
-	border-radius: 20px;
-}
-
-/* /header */
-
-
 /*-- minigrid --*/
 .grid {
   position: relative;
