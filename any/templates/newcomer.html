@@ -1,0 +1,68 @@
+<!-- 新アカウント登録用 -->
+<!DOCTYPE html>
+<html lang="ja">
+​
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/reset.css">
+  <link rel="stylesheet" href="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/tornado6-1.main.css">
+  <link rel="stylesheet" href="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/tornado6-1.header.ver2.css">
+    <link rel="stylesheet" href="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/tornado6-1.footer.css">
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css'>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css'>
+  <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+  <title>denlabo</title>
+</head>
+
+ <header>
+    <nav class="pc-nav">
+      <div class="gnav">
+        <div class="oneBox f-01">
+          <div class="logo"><a href="/home"><img
+                src="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/logo-denlabo-transparent.png"></a>
+          </div>
+        </div>
+        <div class="oneBox f-02"><a href="/column.html"><img
+              src="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/icon-column.svg" alt="コラム">
+            <div>コラム</div>
+          </a></div>
+        <div class="oneBox f-03"><a href="/idea.html"><img
+              src="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/icon-idea.svg" alt="アイデア">
+            <div>アイデア</div>
+          </a></div>
+        <div class="oneBox f-04"><a href="https://denlab.base.shop/"><img
+              src="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/icon-product.svg" alt="商品化">
+            <div>商品化</div>
+          </a></div>
+        <div class="oneBox f-05">
+          <h1 class="mypage"><a href="/login.html">ログイン</a></h1>
+        </div>
+      </div>
+    </nav>
+​
+  </header>
+​
+<body>
+    <h1>新規登録</h1>
+    {% if newcomer_status == "exist_user" %}
+    <h1>そのユーザは既に登録されています。他のパスワードで登録してください。</h1>
+    {% endif %}
+    <a href="/login.html">ログイン画面に戻る</a>
+    <form action="/registar" method="post">
+        <input type="text" name="user_name" placeholder="user name">
+        <input type="password" name="password" placeholder="password">
+        <input type="submit" value="新規登録">
+    </form>
+</body>
+  <footer>
+    <h3>denlobo</h3>
+    <div class="footerList">
+      <div><a href="/home">ホーム</a></div>
+      <div><a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSf_VKM1slFchryKS_UGxZD4q4TwhvwEWQUGDClLKt3DgndusQ/viewform?usp=sf_link">お問い合わせ</a>
+      </div>
+    </div>
+  </footer>
+</html>

@@ -1,0 +1,227 @@
+<!-- 全体HP用　チームメンバー担当 -->
+<!DOCTYPE html>
+<html lang="ja">
+​
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/reset.css">
+  <link rel="stylesheet" href="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/tornado6-1.main.css">
+  <link rel="stylesheet" href="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/tornado6-1.header.ver2.css">
+  <link rel="stylesheet" href="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/tornado6-1.slide.css">
+  <link rel="stylesheet" href="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/tornado6-1.footer.css">
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css'>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css'>
+  <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+  <title>denlabo</title>
+</head>
+​
+<body>
+  <header>
+    <nav class="pc-nav">
+      <div class="gnav">
+        <div class="oneBox f-01">
+          <div class="logo"><a ><img
+                src="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/logo-denlabo-transparent.png"></a>
+          </div>
+        </div>
+        <div class="oneBox f-02"><a href="/column.html"><img
+              src="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/icon-column.svg" alt="コラム">
+            <div>コラム</div>
+          </a></div>
+        <div class="oneBox f-03"><a href="/idea.html"><img
+              src="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/icon-idea.svg" alt="アイデア">
+            <div>アイデア</div>
+          </a></div>
+        <div class="oneBox f-04"><a href="https://denlab.base.shop/"><img
+              src="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/icon-product.svg" alt="商品化">
+            <div>商品化</div>
+          </a></div>
+        <div class="oneBox f-05">
+          {% if "user_name" in session %}
+          <h1 class="mypage"><a href="/login.html">ログイン中</a></h1>
+          {% else %}
+          <h1 class="mypage"><a href="/login.html">ログイン</a></h1>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+​
+  </header>
+  {% if status == "post" %}
+  <h1>登録完了しました！</h1>
+  {% elif status == "login" %}
+  <h1>ログインしました！</h1>
+  {% endif %}
+​
+  <h1>{{column_images.columns_title}}</h1>
+  <!-- メインコンテンツ表示制御用クラス"container" -->
+  <div class="container">
+​
+​
+    <!-- スライダー -->
+    <div class="sliderArea">
+      <div class="regular slider">
+        <div><img src="https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/%23FDDACD+(1).png" alt="denlaboの紹介"></div>
+        <div><img
+            src="{{column_images.columns_images1}}"
+            alt="コラム1"></div>
+        <div><img
+            src="{{column_images.columns_images2}}"
+            alt="コラム2">
+        </div>
+        <div><img
+            src="{{column_images.columns_images3}}"
+            alt="コラム3">
+        </div>
+        <div><img
+            src="{{column_images.columns_images4}}"
+            alt="コラム4">
+        </div>
+        <div><img
+            src="{{column_images.columns_images5}}"
+            alt="コラム5">
+        </div>
+      </div>
+    </div>
+​
+  </div>
+​
+  <div id="innerScript"></div>
+​
+  <footer>
+    <h3>denlabo</h3>
+    <div class="footerList">
+      <div><a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSf_VKM1slFchryKS_UGxZD4q4TwhvwEWQUGDClLKt3DgndusQ/viewform?usp=sf_link">お問い合わせ</a>
+      </div>
+    </div>
+  </footer>
+​
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js'></script>
+  <script src='https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/tornado6-1.query.js'></script>
+  <script src='https://redcat-denlabo.s3.ap-northeast-1.amazonaws.com/tornado6-1.slide.js'></script>
+  <!--<script src='./js/tornado6-1.readjson.js'></script>-->
+  <script>
+    /* ここからread.json */
+    document.addEventListener('DOMContentLoaded', (event) => {
+      console.log(`DOMContentLoadedイベントが発生しました。`);
+​
+      /* json読み込み */
+      //const USERS_API = "https://jsonplaceholder.typicode.com/users";
+      const USERS_API = "https://denlab.herokuapp.com/column";
+​
+​
+      const API = "https://denlab.herokuapp.com/column";
+​
+      async function callApi() {
+        const res = await window.fetch(API);
+        const users = await res.json();
+        console.log(users);
+​
+        var all_cities1 = users.ResultSet.find((v) => v.item.column_tag == "和紙");
+        for (var i = 0; i < all_cities1.length; i++) {
+          console.log(all_cities1[i].column_date);
+        }
+        var all_cities2 = users.ResultSet.filter(function (item, index) {
+          if ("item.column_tag" == "和紙") return true;
+        });
+        for (var i = 0; i < all_cities2.length; i++) {
+          console.log(all_cities2[i].column_date);
+        }
+      }
+​
+      callApi();
+​
+​
+      //ajax送信
+      $.ajax({
+        //画像処理サーバーに返す場合
+        url: '/column',
+        type: 'POST',
+        //data: fData,
+        //contentType: false,//サーバーにデータを送信するときに使う
+        //processData: false,
+        dataType: "json",
+        success: function (data, dataType) {
+          //非同期で通信成功時に読み出される [200 OK 時]
+          console.log('Success', data);
+          var column_id = data.ResultSet.column_id; // 'コラムID'
+          var column_username = data.ResultSet.column_username; // '投稿者指名'
+          var column_tag = data.ResultSet.column_tag;
+          '和紙で固定します'
+          var column_title = data.ResultSet.column_title;
+          'コラムタイトル'
+          var column_image1 = data.ResultSet.column_image1;
+          '投稿画像'
+          var column_date = data.ResultSet.column_date;
+          '投稿日時'
+          console.log('column_id:', column_id);
+​
+          console.log("以下jsonテスト2");
+          for (var item in data) {
+            console.log(item + ': ' + data[item])
+          }
+​
+          console.log("以下jsonテスト3");
+          for (var item in data) {
+            console.log(JSON.parse(JSON.stringify(item + ': ' + data[item])));
+          }
+​
+          var obj = '';
+          obj = JSON.parse(data);
+          console.log('JSON.parse:', obj);
+​
+          obj = JSON.parse(JSON.stringify(data.data));
+          console.log(obj);
+​
+          obj = JSON.parse(JSON.stringify(data.item));
+          console.log(obj);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          //非同期で通信失敗時に読み出される
+          console.error('ajaxError : ' + errorThrown);
+        }
+      });
+​
+      //APIからJSONデータを取得する
+      /*
+      //エラー出るので
+      fetch(url)
+        .then((response) => {
+          return response.json(); //ここでBodyからJSONを返す
+        })
+        .then((result) => {
+          Example(result); //取得したJSONデータを関数に渡す
+        })
+        .catch((e) => {
+          console.log(e) //エラーをキャッチし表示
+        })
+        */
+​
+      //JSONデータを引数に受け取ってDOM操作を行う関数を作成
+      function Example(jsonObj) {
+        const data = jsonObj.results[0]
+        name.textContent = data.name;
+        age.textContent = data.age;
+      }
+​
+      console.log("以下fetch");
+      console.log(USERS_API);
+      //fetch(USERS_API);
+​
+      /* /json読み込み */
+​
+      $('.btn').on('click', function () {
+        var id = $(this).attr("id");
+        alert(id);
+      });
+​
+    });
+    /* ここまでread.json */
+  </script>
+</body>
+​
+</html>
